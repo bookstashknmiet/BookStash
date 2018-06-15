@@ -10,14 +10,67 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:name=".WelcomeFlashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".MyAccountActivity"
+            android:label="My Account"
+            android:parentActivityName=".DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".DashboardActivity"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".HelpActivity"
+            android:label="Help"
+            android:parentActivityName=".DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="About"
+            android:parentActivityName=".DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DashboardActivity" />
+
+        </activity>
+        <activity
+            android:name=".MyOrdersActivity"
+            android:label="My Orders"
+            android:parentActivityName=".DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".WishlistActivity"
+            android:label="Wishlist"
+            android:parentActivityName=".DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".CartActivity"
+            android:label="Cark"
+            android:parentActivityName=".DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DashboardActivity" />
         </activity>
     </application>
 
