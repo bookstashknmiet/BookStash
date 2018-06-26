@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
-
+    tools:context=".SignupActivity">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -33,16 +32,9 @@
             android:background="#00675b"
             tools:ignore="ContentDescription" />
 
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fillViewport="true">
 
             <LinearLayout
@@ -55,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="64dp"
                     android:gravity="center"
-                    android:text="Welcome!"
+                    android:text="Gwala Dairy"
                     android:textColor="#fff"
                     android:textSize="40sp"
                     android:textStyle="bold" />
@@ -65,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Hope you enjoy the product"
+                    android:text="A dairy at your doorstep"
                     android:textColor="#fff"
                     android:textSize="20sp" />
 
@@ -83,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
                     android:gravity="center"
-                    android:text="Log In"
+                    android:text="Sign Up"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="#fff"
                     android:textSize="24sp" />
@@ -120,7 +112,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/sign_in"
+                    android:id="@+id/sign_up_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -135,18 +127,10 @@
                     android:layout_gravity="center_horizontal"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/sign_up"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_margin="16dp"
-                    android:gravity="center"
-                    android:text="Sign up for an account?"
-                    android:textColor="#fff" />
 
             </LinearLayout>
 
         </ScrollView>
     </FrameLayout>
+
 </android.support.constraint.ConstraintLayout>

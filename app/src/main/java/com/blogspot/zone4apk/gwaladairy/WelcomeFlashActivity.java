@@ -4,15 +4,22 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import static java.lang.Thread.sleep;
 
 public class WelcomeFlashActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().
-        setContentView(R.layout.activity_welcome_flash);
+                setContentView(R.layout.activity_welcome_flash);
+        mAuth = FirebaseAuth.getInstance();
 
         final Thread thread = new Thread(new Runnable() {
             @Override
@@ -22,11 +29,20 @@ public class WelcomeFlashActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                    if (currentUser != null)
+                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                    else
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();
                 }
             }
         });
         thread.start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = mAuth.getCurrentUser();
     }
 }
