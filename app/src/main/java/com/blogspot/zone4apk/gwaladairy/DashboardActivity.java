@@ -3,7 +3,6 @@ package com.blogspot.zone4apk.gwaladairy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,9 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 import static java.lang.Thread.sleep;
 
@@ -25,6 +30,11 @@ public class DashboardActivity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     boolean doubleBackToExitPressedOnce = false;
+    View hView;
+    TextView nav_user_email;
+    ImageView nav_user_img;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +50,46 @@ public class DashboardActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        hView = navigationView.getHeaderView(0);
+        nav_user_email = (TextView) hView.findViewById(R.id.textView_user_email);
+        nav_user_img = (ImageView) hView.findViewById(R.id.imageView_user);
         navigationView.setNavigationItemSelectedListener(this);
 
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            nav_user_email.setVisibility(View.VISIBLE);
+            nav_user_email.setText(user.getEmail());
+           /* Picasso.with(this)
+                    .load(user.getPhotoUrl().toString()).transform(new CropCircleTransformation())
+                    .into(nav_user_img);
+                    */
+            //since we do not have user image right now.
+            Picasso.with(this)
+                    .load(R.mipmap.ic_launcher)
+                    .transform(new CropCircleTransformation())
+                    .into(nav_user_img);
+
+        } else {
+            Picasso.with(this)
+                    .load(R.mipmap.ic_launcher)
+                    .transform(new CropCircleTransformation())
+                    .into(nav_user_img);
+            nav_user_email.setText("Please sign in.");
+            nav_user_email.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -119,10 +163,10 @@ public class DashboardActivity extends AppCompatActivity
         } else if (id == R.id.nav_wishlist) {
             startActivity(new Intent(getApplicationContext(), WishlistActivity.class));
         } else if (id == R.id.nav_share) {
-            Toast.makeText(this, "Share is pressed", Toast.LENGTH_SHORT).show();
+            mShare();
         } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "Send is pressed", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(this, "Sharing via Whatsapp!", Toast.LENGTH_SHORT).show();
+            mWhatsShare();
         }
 
         // DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -130,7 +174,31 @@ public class DashboardActivity extends AppCompatActivity
         return true;
     }
 
-    public void msignout(View view) {
-        mAuth.signOut();
+
+    //share app
+    public void mShare() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Hey! Check out Gwala Dairy: A dairy at your doorstep! An app to buy dairy products online.\nhttps://play.google.com/store/apps/details?id=com.blogspot.zone4apk.gwaladairy";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.promomessage));
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
+
+    //share app on whatsapp
+    private void mWhatsShare() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.setPackage("com.whatsapp");
+        String shareBody = "Hey! Check out Gwala Dairy: A dairy at your doorstep! \nAn app to buy dairy products online.\nhttps://play.google.com/store/apps/details?id=com.blogspot.zone4apk.gwaladairy";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.promomessage));
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        try {
+            startActivity(sharingIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Sorry! Can't find Whatsapp", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

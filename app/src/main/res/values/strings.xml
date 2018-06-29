@@ -8,7 +8,15 @@
     <string name="title_activity_dashboard">Gwala Dairy</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Gwala Dairy</string>
+    <string name="nav_header_subtitle">user@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="promomessage">Promotional Message</string>
+    <string name="about_text1">Your feedback is greatly appreciated. Problems,</string>
+    <string name="about_text2">suggestions, general queries please let us</string>
+    <string name="about_text3">know.</string>
+    <string name="app_Version">App version 1.0</string>
+    <string name="about_rate_us_in_google_play">Rate us in Google Play</string>
+    <string name="about_share">Share the app</string>
+    <string name="about_developer">Application designed and developed for commercial use.</string>
 </resources>

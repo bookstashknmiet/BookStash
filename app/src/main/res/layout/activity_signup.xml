@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:alpha="0.5"
             android:scaleType="centerCrop"
-            android:src="@drawable/dashboard_img"
+            android:src="@drawable/login_background"
             tools:ignore="ContentDescription" />
 
         <ImageView
@@ -22,13 +22,13 @@
             android:layout_height="match_parent"
             android:alpha="0.5"
             android:scaleType="centerCrop"
-            android:src="@drawable/dashboard_img"
+            android:src="@drawable/login_background"
             tools:ignore="ContentDescription" />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.65"
+            android:alpha="0.5"
             android:background="#00675b"
             tools:ignore="ContentDescription" />
 

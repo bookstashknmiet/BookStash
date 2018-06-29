@@ -49,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //onclick listener for signup hyperlink
                 startActivity(new Intent(getApplicationContext(), SignupActivity.class));
+                finish();
+                
             }
         });
 
