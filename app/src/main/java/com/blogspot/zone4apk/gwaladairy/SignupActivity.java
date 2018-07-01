@@ -15,6 +15,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -24,6 +28,7 @@ public class SignupActivity extends AppCompatActivity {
     // [END declare_auth]
     EditText emailField;
     EditText passField;
+    private DatabaseReference mUserDataBase;
 
     private ProgressBar progressBar;
     @Override
@@ -83,6 +88,22 @@ public class SignupActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //User details Adding to DataBase
+
+                            //Getting Database refrence
+
+                            mUserDataBase = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
+
+
+
+                            HashMap<String, String> usersDetails = new HashMap<String, String>();
+                            usersDetails.put("name",mAuth.getCurrentUser().getEmail());
+                            usersDetails.put("address","default");
+                            usersDetails.put("mobno","123456789");
+
+                            mUserDataBase.setValue(usersDetails);
+
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
