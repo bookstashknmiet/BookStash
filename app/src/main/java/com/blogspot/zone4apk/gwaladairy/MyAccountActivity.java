@@ -20,6 +20,7 @@ public class MyAccountActivity extends AppCompatActivity {
     ImageView imageView;
     FirebaseAuth mAuth;
     TextView userEmail;
+    TextView userName;
     Button btnSignout;
 
     @Override
@@ -28,6 +29,7 @@ public class MyAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_account);
         imageView = findViewById(R.id.imageView_user);
         userEmail = findViewById(R.id.textView_user_email);
+        userName=findViewById(R.id.textView_user_name);
         btnSignout=findViewById(R.id.btn_sign_out);
         Picasso.with(this)
                 .load(R.drawable.gwala)
@@ -48,9 +50,11 @@ public class MyAccountActivity extends AppCompatActivity {
 
     private void updateUi(FirebaseUser user) {
         if (user != null) {
+            userName.setText(user.getDisplayName());
             userEmail.setText(user.getEmail());
             btnSignout.setVisibility(View.VISIBLE);
         } else {
+            userName.setText(". . .");
             userEmail.setText(". . . . .");
             btnSignout.setVisibility(View.GONE);
         }

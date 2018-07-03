@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -28,7 +29,6 @@ public class SignupActivity extends AppCompatActivity {
     // [END declare_auth]
     EditText emailField;
     EditText passField;
-    private DatabaseReference mUserDataBase;
 
     private ProgressBar progressBar;
     @Override
@@ -65,8 +65,15 @@ public class SignupActivity extends AppCompatActivity {
     }
     private boolean validateForm() {
         //This function validates the form credentials
-        return true;
-        //assuming that user filling a valid info
+        if (TextUtils.isEmpty(emailField.getText().toString())) {
+            Toast.makeText(this, "Email required.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(passField.getText().toString())) {
+            Toast.makeText(this, "Password required.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else
+            return true;
+
     }
 
 
@@ -88,22 +95,6 @@ public class SignupActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
-                            //User details Adding to DataBase
-
-                            //Getting Database refrence
-
-                            mUserDataBase = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
-
-
-
-                            HashMap<String, String> usersDetails = new HashMap<String, String>();
-                            usersDetails.put("name",mAuth.getCurrentUser().getEmail());
-                            usersDetails.put("address","default");
-                            usersDetails.put("mobno","123456789");
-
-                            mUserDataBase.setValue(usersDetails);
-
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -126,7 +117,7 @@ public class SignupActivity extends AppCompatActivity {
         hideProgressDialog();
         if (user != null) {
             Toast.makeText(this, "Signed in as :"+user.getEmail(), Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
             this.finish();
         } else {
             Toast.makeText(this, "Null user", Toast.LENGTH_SHORT).show();

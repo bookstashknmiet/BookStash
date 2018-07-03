@@ -32,6 +32,7 @@ public class DashboardActivity extends AppCompatActivity
     boolean doubleBackToExitPressedOnce = false;
     View hView;
     TextView nav_user_email;
+    TextView nav_user_name;
     ImageView nav_user_img;
 
 
@@ -52,6 +53,7 @@ public class DashboardActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         hView = navigationView.getHeaderView(0);
         nav_user_email = (TextView) hView.findViewById(R.id.textView_user_email);
+        nav_user_name=(TextView) hView.findViewById(R.id.textView_user_name);
         nav_user_img = (ImageView) hView.findViewById(R.id.imageView_user);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -70,6 +72,8 @@ public class DashboardActivity extends AppCompatActivity
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            nav_user_name.setVisibility(View.VISIBLE);
+            nav_user_name.setText(user.getDisplayName());
             nav_user_email.setVisibility(View.VISIBLE);
             nav_user_email.setText(user.getEmail());
            /* Picasso.with(this)
@@ -87,6 +91,7 @@ public class DashboardActivity extends AppCompatActivity
                     .load(R.mipmap.ic_launcher)
                     .transform(new CropCircleTransformation())
                     .into(nav_user_img);
+            nav_user_name.setText(R.string.nav_header_title);
             nav_user_email.setText("Please sign in.");
             nav_user_email.setVisibility(View.GONE);
         }

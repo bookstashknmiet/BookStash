@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                 //onclick listener for signup hyperlink
                 startActivity(new Intent(getApplicationContext(), SignupActivity.class));
                 finish();
-                
+
             }
         });
 
@@ -66,8 +67,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateForm() {
         //This function validates the form credentials
-        return true;
-        //considering that form is already validated.
+        if (TextUtils.isEmpty(emailField.getText().toString())) {
+            Toast.makeText(this, "Email required.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(passField.getText().toString())) {
+            Toast.makeText(this, "Password required.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else
+            return true;
+
     }
 
     private void signIn(String email, String password) {
