@@ -3,7 +3,11 @@ package com.blogspot.zone4apk.gwaladairy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,9 +21,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductItem;
+import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.RecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -35,6 +49,14 @@ public class DashboardActivity extends AppCompatActivity
     TextView nav_user_name;
     ImageView nav_user_img;
 
+    //Using RecylerView to show the shopping items
+    RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private ArrayList<ProductItem> productItems;
+
+    //FirebaseDatabase
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
 
     @Override
@@ -43,6 +65,17 @@ public class DashboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Setting recycler view
+        recyclerView = findViewById(R.id.recyclerview_dashboard);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        if (recyclerView != null)
+            recyclerView.setHasFixedSize(true);
+        productItems = new ArrayList<>();
+
+        //Products Database
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        getProductData();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,7 +86,7 @@ public class DashboardActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         hView = navigationView.getHeaderView(0);
         nav_user_email = (TextView) hView.findViewById(R.id.textView_user_email);
-        nav_user_name=(TextView) hView.findViewById(R.id.textView_user_name);
+        nav_user_name = (TextView) hView.findViewById(R.id.textView_user_name);
         nav_user_img = (ImageView) hView.findViewById(R.id.imageView_user);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -61,6 +94,34 @@ public class DashboardActivity extends AppCompatActivity
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+    }
+
+    void getProductData() {
+        databaseReference = firebaseDatabase.getReference("ProductDetailsDatabase");
+        databaseReference.keepSynced(true);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                productItems.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ProductItem productItem = new ProductItem();
+                    productItem = snapshot.getValue(ProductItem.class);
+
+                    //adding new item to arraylist
+                    productItems.add(productItem);
+                }
+                //setting adapter
+                recyclerView.setAdapter(new RecyclerAdapter(productItems, getApplicationContext()));
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
