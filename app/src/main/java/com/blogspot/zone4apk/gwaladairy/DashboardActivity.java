@@ -3,11 +3,11 @@ package com.blogspot.zone4apk.gwaladairy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,23 +17,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductItem;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.RecyclerAdapter;
+import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -51,8 +49,7 @@ public class DashboardActivity extends AppCompatActivity
 
     //Using RecylerView to show the shopping items
     RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private ArrayList<ProductItem> productItems;
+    FirebaseRecyclerAdapter adapter;
 
     //FirebaseDatabase
     FirebaseDatabase firebaseDatabase;
@@ -66,17 +63,38 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Setting recycler view
+        //Setting recycler view-----------------------------------------------------------
         recyclerView = findViewById(R.id.recyclerview_dashboard);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        if (recyclerView != null)
-            recyclerView.setHasFixedSize(true);
-        productItems = new ArrayList<>();
-
-        //Products Database
         firebaseDatabase = FirebaseDatabase.getInstance();
-        getProductData();
+        databaseReference = firebaseDatabase.getReference().child("ProductDetailsDatabase");
+        databaseReference.keepSynced(true);
+        Query query = databaseReference.limitToLast(50);
+        FirebaseRecyclerOptions<ProductItem> options = new FirebaseRecyclerOptions.Builder<ProductItem>().setQuery(query, ProductItem.class).build();
 
+        adapter = new FirebaseRecyclerAdapter<ProductItem, ProductViewHolder>(options) {
+            @NonNull
+            @Override
+            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+                return new ProductViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull ProductItem model) {
+                holder.setText_name(model.getName());
+                holder.setText_description(model.getDescription());
+                holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
+                holder.setImage(model.getImageurl(), getApplicationContext());
+                holder.setText_quantity(model.getQuantity());
+            }
+
+        };
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+
+        //AppDrawer-----------------------------------------------------
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -96,39 +114,19 @@ public class DashboardActivity extends AppCompatActivity
         // [END initialize_auth]
     }
 
-    void getProductData() {
-        databaseReference = firebaseDatabase.getReference("ProductDetailsDatabase");
-        databaseReference.keepSynced(true);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                productItems.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ProductItem productItem = new ProductItem();
-                    productItem = snapshot.getValue(ProductItem.class);
-
-                    //adding new item to arraylist
-                    productItems.add(productItem);
-                }
-                //setting adapter
-                recyclerView.setAdapter(new RecyclerAdapter(productItems, getApplicationContext()));
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
+        adapter.startListening();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     private void updateUI(FirebaseUser user) {

@@ -36,10 +36,19 @@ public class ProductItem {
         this.imageurl = imageurl;
     }
 
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
     private String name;
     private Long price;
     private String description;
     private String imageurl;
+    private String quantity;
     //name is our key to fetch data
 
 }
