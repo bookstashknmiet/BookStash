@@ -1,8 +1,11 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -28,10 +31,14 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -81,17 +88,88 @@ public class DashboardActivity extends AppCompatActivity
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull ProductItem model) {
+            protected void onBindViewHolder(@NonNull final ProductViewHolder holder, int position, @NonNull final ProductItem model) {
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
                 holder.setImage(model.getImageurl(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
+
+                //----------Recycler Click Event------------
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        CharSequence options[] = new CharSequence[]{"Add to Cart","Add to Wishlist"};
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
+                        builder.setTitle("Select Option");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                //click event
+
+                                if (which == 0)
+                                {
+                                   //Added to cart
+
+                                    DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
+
+                                    String pushId = cartDatabase.getKey();
+
+                                    Map addToCartProductDetails = new HashMap();
+                                    addToCartProductDetails.put("name",model.getName());
+
+                                    cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                                            if(databaseError==null){
+                                                Toast.makeText(DashboardActivity.this, "Item is Added to cart", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+                                }
+
+                                if (which==1){
+                                    //Added to wish list
+
+                                    DatabaseReference wishListDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
+
+                                    String pushId = wishListDatabase.getKey();
+
+                                    Map addToWishProductDetails = new HashMap();
+                                    addToWishProductDetails.put("name",model.getName());
+
+                                    wishListDatabase.updateChildren(addToWishProductDetails, new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                                            if(databaseError==null){
+                                                Toast.makeText(DashboardActivity.this, "Item is Added to WishList", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        builder.show();
+
+                    }
+                });
             }
+
 
         };
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+
+
+
 
 
         //AppDrawer-----------------------------------------------------
