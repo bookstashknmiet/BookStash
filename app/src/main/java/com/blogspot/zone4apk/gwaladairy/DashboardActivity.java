@@ -100,7 +100,7 @@ public class DashboardActivity extends AppCompatActivity
                     @Override
                     public void onClick(View view) {
 
-                        CharSequence options[] = new CharSequence[]{"Add to Cart","Add to Wishlist"};
+                        CharSequence options[] = new CharSequence[]{"Add to Cart", "Add to Wishlist"};
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
                         builder.setTitle("Select Option");
@@ -110,22 +110,21 @@ public class DashboardActivity extends AppCompatActivity
 
                                 //click event
 
-                                if (which == 0)
-                                {
-                                   //Added to cart
+                                if (which == 0) {
+                                    //Added to cart
 
                                     DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
 
                                     String pushId = cartDatabase.getKey();
 
                                     Map addToCartProductDetails = new HashMap();
-                                    addToCartProductDetails.put("name",model.getName());
+                                    addToCartProductDetails.put("name", model.getName());
 
                                     cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                                         @Override
                                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
 
-                                            if(databaseError==null){
+                                            if (databaseError == null) {
                                                 Toast.makeText(DashboardActivity.this, "Item is Added to cart", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -133,7 +132,7 @@ public class DashboardActivity extends AppCompatActivity
 
                                 }
 
-                                if (which==1){
+                                if (which == 1) {
                                     //Added to wish list
 
                                     DatabaseReference wishListDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
@@ -141,13 +140,13 @@ public class DashboardActivity extends AppCompatActivity
                                     String pushId = wishListDatabase.getKey();
 
                                     Map addToWishProductDetails = new HashMap();
-                                    addToWishProductDetails.put("name",model.getName());
+                                    addToWishProductDetails.put("name", model.getName());
 
                                     wishListDatabase.updateChildren(addToWishProductDetails, new DatabaseReference.CompletionListener() {
                                         @Override
                                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
 
-                                            if(databaseError==null){
+                                            if (databaseError == null) {
                                                 Toast.makeText(DashboardActivity.this, "Item is Added to WishList", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -166,10 +165,6 @@ public class DashboardActivity extends AppCompatActivity
         };
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
-
-
-
 
 
         //AppDrawer-----------------------------------------------------
