@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,12 +17,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductItem;
+import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -32,8 +44,16 @@ public class DashboardActivity extends AppCompatActivity
     boolean doubleBackToExitPressedOnce = false;
     View hView;
     TextView nav_user_email;
+    TextView nav_user_name;
     ImageView nav_user_img;
 
+    //Using RecylerView to show the shopping items
+    RecyclerView recyclerView;
+    FirebaseRecyclerAdapter adapter;
+
+    //FirebaseDatabase
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
 
     @Override
@@ -43,6 +63,38 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Setting recycler view-----------------------------------------------------------
+        recyclerView = findViewById(R.id.recyclerview_dashboard);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference().child("ProductDetailsDatabase");
+        databaseReference.keepSynced(true);
+        Query query = databaseReference.limitToLast(50);
+        FirebaseRecyclerOptions<ProductItem> options = new FirebaseRecyclerOptions.Builder<ProductItem>().setQuery(query, ProductItem.class).build();
+
+        adapter = new FirebaseRecyclerAdapter<ProductItem, ProductViewHolder>(options) {
+            @NonNull
+            @Override
+            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+                return new ProductViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull ProductItem model) {
+                holder.setText_name(model.getName());
+                holder.setText_description(model.getDescription());
+                holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
+                holder.setImage(model.getImageurl(), getApplicationContext());
+                holder.setText_quantity(model.getQuantity());
+            }
+
+        };
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+
+        //AppDrawer-----------------------------------------------------
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -52,6 +104,7 @@ public class DashboardActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         hView = navigationView.getHeaderView(0);
         nav_user_email = (TextView) hView.findViewById(R.id.textView_user_email);
+        nav_user_name = (TextView) hView.findViewById(R.id.textView_user_name);
         nav_user_img = (ImageView) hView.findViewById(R.id.imageView_user);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -61,15 +114,25 @@ public class DashboardActivity extends AppCompatActivity
         // [END initialize_auth]
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
+        adapter.startListening();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            nav_user_name.setVisibility(View.VISIBLE);
+            nav_user_name.setText(user.getDisplayName());
             nav_user_email.setVisibility(View.VISIBLE);
             nav_user_email.setText(user.getEmail());
            /* Picasso.with(this)
@@ -87,6 +150,7 @@ public class DashboardActivity extends AppCompatActivity
                     .load(R.mipmap.ic_launcher)
                     .transform(new CropCircleTransformation())
                     .into(nav_user_img);
+            nav_user_name.setText(R.string.nav_header_title);
             nav_user_email.setText("Please sign in.");
             nav_user_email.setVisibility(View.GONE);
         }

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.blogspot.zone4apk.gwaladairy">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -68,7 +70,7 @@
         </activity>
         <activity
             android:name=".CartActivity"
-            android:label="Cark"
+            android:label="Cart"
             android:parentActivityName=".DashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -78,6 +80,18 @@
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ChatSupportActivity"
+            android:label="Chat Support">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HelpActivity" />
+        </activity>
+
     </application>
 
 </manifest>

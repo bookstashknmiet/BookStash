@@ -6,12 +6,14 @@
         android:id="@+id/action_mycart"
         android:orderInCategory="100"
         android:icon="@drawable/ic_cart"
-        android:title="My Cart"
-        app:showAsAction="ifRoom" />
+        android:name="My Cart"
+        app:showAsAction="ifRoom"
+        android:title="My Cart" />
     <item
         android:id="@+id/action_notification"
         android:orderInCategory="200"
         android:icon="@drawable/ic_notifications"
-        android:title="Notification"
-        app:showAsAction="ifRoom" />
+        android:name="Notification"
+        app:showAsAction="ifRoom"
+        android:title="Notification" />
 </menu>

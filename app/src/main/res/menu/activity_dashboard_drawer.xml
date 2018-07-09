@@ -7,36 +7,44 @@
         <item
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_account"
+            android:name="My Account"
             android:title="My Account" />
 
         <item
             android:id="@+id/nav_my_orders"
             android:icon="@drawable/ic_myorders"
+            android:name="My Orders"
             android:title="My Orders" />
         <item
             android:id="@+id/nav_wishlist"
             android:icon="@drawable/ic_wishlist"
+            android:name="Wishlist"
             android:title="Wishlist" />
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help"
+            android:name="Help"
             android:title="Help" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_about"
+            android:name="About"
             android:title="About" />
 
     </group>
 
-    <item android:title="Communicate">
+    <item android:name="Communicate"
+        android:title="Communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
+                android:name="Share"
                 android:title="Share" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
+                android:name="Share via Whatsapp"
                 android:title="Share via Whatsapp" />
         </menu>
     </item>

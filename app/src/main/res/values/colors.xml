@@ -2,5 +2,11 @@
 <resources>
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00675b</color>
-    <color name="colorAccent">#5df2d6</color>
+    <color name="colorAccent">#4DB6AC</color>
+
+
+    <color name="colorAdminCard">#4DB6AC</color>
+    <color name="colorUserCard">#fff</color>
+    <color name="colorAdminText">#fff</color>
+    <color name="colorUserText">#555</color>
 </resources>

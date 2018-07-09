@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +16,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -60,8 +65,15 @@ public class SignupActivity extends AppCompatActivity {
     }
     private boolean validateForm() {
         //This function validates the form credentials
-        return true;
-        //assuming that user filling a valid info
+        if (TextUtils.isEmpty(emailField.getText().toString())) {
+            Toast.makeText(this, "Email required.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(passField.getText().toString())) {
+            Toast.makeText(this, "Password required.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else
+            return true;
+
     }
 
 
@@ -105,7 +117,7 @@ public class SignupActivity extends AppCompatActivity {
         hideProgressDialog();
         if (user != null) {
             Toast.makeText(this, "Signed in as :"+user.getEmail(), Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
             this.finish();
         } else {
             Toast.makeText(this, "Null user", Toast.LENGTH_SHORT).show();
