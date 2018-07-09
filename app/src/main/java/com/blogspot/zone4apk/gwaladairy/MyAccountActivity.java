@@ -1,6 +1,8 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,8 +31,8 @@ public class MyAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_account);
         imageView = findViewById(R.id.imageView_user);
         userEmail = findViewById(R.id.textView_user_email);
-        userName=findViewById(R.id.textView_user_name);
-        btnSignout=findViewById(R.id.btn_sign_out);
+        userName = findViewById(R.id.textView_user_name);
+        btnSignout = findViewById(R.id.btn_sign_out);
         Picasso.with(this)
                 .load(R.drawable.gwala)
                 .transform(new CropCircleTransformation())
@@ -62,15 +64,24 @@ public class MyAccountActivity extends AppCompatActivity {
 
     public void mViewAllOrder(View view) {
         // onclick listener of view all order link
-        startActivity(new Intent(getApplicationContext(),MyOrdersActivity.class));
+        startActivity(new Intent(getApplicationContext(), MyOrdersActivity.class));
         finish();
     }
 
     public void msignout(View view) {
         //signing out on request
-        mAuth.signOut();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUi(currentUser);
-        Toast.makeText(this, "Signed out successfully.", Toast.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.layout_my_account), "Do you want to sign out and exit the app?", Snackbar.LENGTH_SHORT)
+                .setAction("Signout", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mAuth.signOut();
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        updateUi(currentUser);
+                        Toast.makeText(getApplicationContext(), "Signed out successfully.", Toast.LENGTH_SHORT).show();
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), WelcomeFlashActivity.class));
+                    }
+                })
+                .show();
     }
 }
