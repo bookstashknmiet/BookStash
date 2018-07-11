@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductViewHolder;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,6 +120,13 @@ public class DashboardActivity extends AppCompatActivity
 
                                     Map addToCartProductDetails = new HashMap();
                                     addToCartProductDetails.put("name", model.getName());
+                                    addToCartProductDetails.put("description",model.getDescription());
+                                    addToCartProductDetails.put("quantity",model.getQuantity());
+                                    addToCartProductDetails.put("price",model.getPrice());
+                                    addToCartProductDetails.put("image_url",model.getImageurl());
+                                    addToCartProductDetails.put("itemId",pushId);
+
+
 
                                     cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                                         @Override
@@ -141,6 +149,11 @@ public class DashboardActivity extends AppCompatActivity
 
                                     Map addToWishProductDetails = new HashMap();
                                     addToWishProductDetails.put("name", model.getName());
+                                    addToWishProductDetails.put("description",model.getDescription());
+                                    addToWishProductDetails.put("quantity",model.getQuantity());
+                                    addToWishProductDetails.put("price",model.getPrice());
+                                    addToWishProductDetails.put("image_url",model.getImageurl());
+                                    addToWishProductDetails.put("itemId",pushId);
 
                                     wishListDatabase.updateChildren(addToWishProductDetails, new DatabaseReference.CompletionListener() {
                                         @Override
@@ -273,7 +286,8 @@ public class DashboardActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_mycart) {
-            Toast.makeText(this, "Cart is pressed", Toast.LENGTH_SHORT).show();
+           Intent intentCart = new Intent(DashboardActivity.this,CartActivity.class);
+           startActivity(intentCart);
             return true;
         } else if (id == R.id.action_notification) {
             Toast.makeText(this, "Notification is pressed", Toast.LENGTH_SHORT).show();
