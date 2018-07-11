@@ -6,10 +6,21 @@ package com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist;
 
 public class WishlistItem {
 
-    public WishlistItem(){
+    //Database fields
+    public String name;
+    public String description;
+    public Long price;
+    public String quantity;
+    public String image_url;
+    public String itemId;
+
+
+    //Default constructor
+    public WishlistItem() {
 
     }
 
+    //Getters and Setters
     public String getName() {
         return name;
     }
@@ -50,12 +61,6 @@ public class WishlistItem {
         this.image_url = image_url;
     }
 
-    public String name;
-    public String description;
-    public Long price;
-    public String quantity;
-    public String image_url;
-
     public String getItemId() {
         return itemId;
     }
@@ -63,7 +68,5 @@ public class WishlistItem {
     public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-
-    public String itemId;
 
 }

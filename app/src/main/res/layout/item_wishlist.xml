@@ -12,12 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="80dp" />
+
+
         <ImageView
             android:id="@+id/button_delete_wishlist"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="end"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
             android:elevation="1dp"
             android:src="@drawable/ic_remove_wishlist" />
 
@@ -31,8 +39,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_gravity="center"
-                android:scaleType="fitXY"
-                android:src="@drawable/dashboard_img" />
+                android:backgroundTint="#ddd"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,8 +108,10 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
-                android:layout_margin="8dp"
-                android:background="#999" />
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:background="#bbb" />
 
             <TextView
                 android:id="@+id/button_move_to_cart"
@@ -110,7 +120,9 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="Move to cart"
-                android:textColor="?android:attr/colorAccent" />
+                android:textAllCaps="true"
+                android:textColor="?android:attr/colorAccent"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </FrameLayout>

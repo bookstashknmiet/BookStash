@@ -4,16 +4,16 @@
 
     <item
         android:id="@+id/action_mycart"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_cart"
         android:name="My Cart"
-        app:showAsAction="ifRoom"
-        android:title="My Cart" />
+        android:icon="@drawable/ic_cart"
+        android:orderInCategory="100"
+        android:title="My Cart"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_notification"
-        android:orderInCategory="200"
-        android:icon="@drawable/ic_notifications"
         android:name="Notification"
-        app:showAsAction="ifRoom"
-        android:title="Notification" />
+        android:icon="@drawable/ic_notifications"
+        android:orderInCategory="200"
+        android:title="Notification"
+        app:showAsAction="ifRoom" />
 </menu>

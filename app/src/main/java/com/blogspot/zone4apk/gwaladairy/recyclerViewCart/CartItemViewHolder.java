@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,13 +46,12 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
 
     public CartItemViewHolder(View itemView) {
         super(itemView);
-
         mAuth = FirebaseAuth.getInstance();
 
         text_name = (TextView) itemView.findViewById(R.id.product_name_cart);
         text_description = (TextView) itemView.findViewById(R.id.product_description_cart);
         text_price = (TextView) itemView.findViewById(R.id.product_price_cart);
-        text_quantity=(TextView) itemView.findViewById(R.id.product_quantity_cart);
+        text_quantity = (TextView) itemView.findViewById(R.id.product_quantity_cart);
         image = (ImageView) itemView.findViewById(R.id.product_image_cart);
 
         moveingBtnToWishlist = itemView.findViewById(R.id.button_move_to_wishlist);
@@ -69,18 +67,18 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
 
                 Map addToCartProductDetails = new HashMap();
                 addToCartProductDetails.put("name", text_name.getText());
-                addToCartProductDetails.put("description",text_description.getText());
-                addToCartProductDetails.put("quantity",text_quantity.getText());
-                addToCartProductDetails.put("price",itemPrice);
-                addToCartProductDetails.put("image_url",imageUrl);
-                addToCartProductDetails.put("itemId",pushId);
+                addToCartProductDetails.put("description", text_description.getText());
+                addToCartProductDetails.put("quantity", text_quantity.getText());
+                addToCartProductDetails.put("price", itemPrice);
+                addToCartProductDetails.put("image_url", imageUrl);
+                addToCartProductDetails.put("itemId", pushId);
 
                 cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
 
                         if (databaseError == null) {
-                            Log.i("Status","Item is add to Wishlist");
+                            Log.i("Status", "Item is add to Wishlist");
                         }
                     }
                 });
@@ -91,12 +89,11 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
         removeItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //OnClick Handler for Delete button
                 DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString());
                 mWishListDataBase.child(itemId).removeValue();
             }
         });
-
 
 
     }
@@ -104,6 +101,7 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
     public void setText_name(String name) {
         text_name.setText(name);
     }
+
     public void setText_description(String description) {
         text_description.setText(description);
     }
@@ -112,11 +110,11 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
         text_price.setText(price);
     }
 
-    public void setPrice(Long itemPrice){
+    public void setPrice(Long itemPrice) {
         this.itemPrice = itemPrice;
     }
 
-    public void setItemId(String itemId){
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
 
@@ -127,10 +125,9 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
                 .into(image);
 
         this.imageUrl = imageUrl;
-
     }
 
-    public void setText_quantity(String quantity){
+    public void setText_quantity(String quantity) {
         text_quantity.setText(quantity);
     }
 

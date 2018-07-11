@@ -1,17 +1,16 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItem;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItemViewHolder;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -37,7 +36,6 @@ public class WishlistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
-
         mAuth = FirebaseAuth.getInstance();
 
         //Setting recycler view-----------------------------------------------------------
@@ -72,9 +70,8 @@ public class WishlistActivity extends AppCompatActivity {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         //On Click Events Goes here
-
+                        Toast.makeText(WishlistActivity.this, "Item is clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

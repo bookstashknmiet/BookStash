@@ -6,10 +6,20 @@ package com.blogspot.zone4apk.gwaladairy.recyclerViewCart;
 
 public class CartItem {
 
-    public CartItem(){
+
+    //database fields
+    public String name;
+    public String description;
+    public Long price;
+    public String quantity;
+    public String image_url;
+
+    //default constructor
+    public CartItem() {
 
     }
 
+    //getters and setters
     public String getName() {
         return name;
     }
@@ -17,12 +27,6 @@ public class CartItem {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String name;
-    public String description;
-    public Long price;
-    public String quantity;
-    public String image_url;
 
     public String getItemId() {
         return itemId;

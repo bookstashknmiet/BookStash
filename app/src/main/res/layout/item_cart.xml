@@ -8,6 +8,13 @@
     app:cardCornerRadius="4dp"
     app:cardUseCompatPadding="true">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="64dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,16 +29,15 @@
             <ImageView
                 android:id="@+id/product_image_cart"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_gravity="center"
-                android:layout_margin="12dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="2"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@drawable/dashboard_img" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="12dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -71,7 +77,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/product_seller_cart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -80,24 +85,23 @@
                     android:textSize="10sp" />
 
                 <LinearLayout
-                    android:padding="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:padding="8dp"
                     android:weightSum="3">
 
                     <Spinner
-                        android:id="@+id/product_brought_qty_cart"
-                        android:spinnerMode="dialog"
-                        android:layout_weight="2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></Spinner>
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:spinnerMode="dialog"></Spinner>
 
                     <TextView
-                        android:layout_weight="1"
                         android:id="@+id/product_price_cart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="center_vertical|end"
                         android:text="\u20B945"
                         android:textColor="#0000ff"
@@ -112,7 +116,8 @@
             android:layout_height="1dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="24dp"
-            android:background="#999" />
+            android:background="#999"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -124,7 +129,8 @@
                 android:id="@+id/button_remove_from_cart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="1dp"
+                android:layout_margin="0.5dp"
+                android:textStyle="bold"
                 android:layout_weight="1"
                 android:background="#fff"
                 android:gravity="center"
@@ -138,10 +144,11 @@
                 android:id="@+id/button_move_to_wishlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="1dp"
+                android:layout_margin="0.5dp"
                 android:layout_weight="1"
                 android:background="#fff"
                 android:gravity="center"
+                android:textStyle="bold"
                 android:padding="8dp"
                 android:text="Move to wishlist"
                 android:textAllCaps="true"

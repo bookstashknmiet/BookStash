@@ -8,11 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.blogspot.zone4apk.gwaladairy.DashboardActivity;
 import com.blogspot.zone4apk.gwaladairy.R;
-import com.blogspot.zone4apk.gwaladairy.WishlistActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropSquareTransformation;
@@ -49,8 +45,6 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
     Long itemPrice;
 
 
-
-
     public WishlistItemViewHolder(final View itemView) {
         super(itemView);
 
@@ -60,7 +54,7 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
         text_name = (TextView) itemView.findViewById(R.id.product_name_wishlist);
         text_description = (TextView) itemView.findViewById(R.id.product_description_wishlist);
         text_price = (TextView) itemView.findViewById(R.id.product_price_wishlist);
-        text_quantity=(TextView) itemView.findViewById(R.id.product_quantity_wishlist);
+        text_quantity = (TextView) itemView.findViewById(R.id.product_quantity_wishlist);
         image = (ImageView) itemView.findViewById(R.id.product_image_wishlist);
 
         moveingBtnToCrat = itemView.findViewById(R.id.button_move_to_cart);
@@ -71,24 +65,23 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
                 DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString());
                 mWishListDataBase.child(itemId).removeValue();
 
-                DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
-
-                String pushId = cartDatabase.getKey();
+                DatabaseReference mCartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
+                String pushId = mCartDatabase.getKey();
 
                 Map addToCartProductDetails = new HashMap();
                 addToCartProductDetails.put("name", text_name.getText());
-                addToCartProductDetails.put("description",text_description.getText());
-                addToCartProductDetails.put("quantity",text_quantity.getText());
-                addToCartProductDetails.put("price",itemPrice);
-                addToCartProductDetails.put("image_url",imageUrl);
-                addToCartProductDetails.put("itemId",pushId);
+                addToCartProductDetails.put("description", text_description.getText());
+                addToCartProductDetails.put("quantity", text_quantity.getText());
+                addToCartProductDetails.put("price", itemPrice);
+                addToCartProductDetails.put("image_url", imageUrl);
+                addToCartProductDetails.put("itemId", pushId);
 
-                cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
+                mCartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
 
                         if (databaseError == null) {
-                            Log.i("Status","Item is add to Cart");
+                            Log.i("Status", "Item is add to Cart");
                         }
                     }
                 });
@@ -100,29 +93,29 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
         removeItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString());
                 mWishListDataBase.child(itemId).removeValue();
-
             }
         });
     }
-    public void setItemId(String itemId){
+
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
 
     public void setText_name(String name) {
         text_name.setText(name);
     }
+
     public void setText_description(String description) {
         text_description.setText(description);
     }
 
     public void setText_price(String price) {
         text_price.setText(price);
-
     }
-    public void setPrice(Long itemPrice){
+
+    public void setPrice(Long itemPrice) {
         this.itemPrice = itemPrice;
     }
 
@@ -133,12 +126,10 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
                 .into(image);
 
         this.imageUrl = imageUrl;
-
     }
 
-    public void setText_quantity(String quantity){
+    public void setText_quantity(String quantity) {
         text_quantity.setText(quantity);
     }
-
 
 }

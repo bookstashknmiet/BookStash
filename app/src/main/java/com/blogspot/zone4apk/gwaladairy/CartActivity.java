@@ -1,11 +1,8 @@
 package com.blogspot.zone4apk.gwaladairy;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -16,18 +13,12 @@ import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItemViewHolder;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductItem;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -45,7 +36,6 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-
         mAuth = FirebaseAuth.getInstance();
 
         //Setting recycler view-----------------------------------------------------------
@@ -81,14 +71,11 @@ public class CartActivity extends AppCompatActivity {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         //On Click Events Goes here
-
+                        Toast.makeText(CartActivity.this, "Item is clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
-
-
         };
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);

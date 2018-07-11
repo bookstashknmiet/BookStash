@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#eee"
     tools:context=".WishlistActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_wishlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-
 </android.support.constraint.ConstraintLayout>
