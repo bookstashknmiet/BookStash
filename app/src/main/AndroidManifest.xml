@@ -91,7 +91,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HelpActivity" />
         </activity>
-
+        <activity
+            android:name=".MyAddressActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

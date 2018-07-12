@@ -1,5 +1,6 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -92,5 +93,10 @@ public class CartActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    public void mCartCheckout(View view) {
+        startActivity(new Intent(getApplicationContext(), MyAddressActivity.class));
+        Toast.makeText(this, "Please choose an address to complete your order.", Toast.LENGTH_SHORT).show();
     }
 }
