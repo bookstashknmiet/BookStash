@@ -5,6 +5,9 @@ public class Chat {
     String timestamp;
     String sender;
 
+    public Chat() {
+    }
+
     public String getMessage() {
         return message;
     }
@@ -27,8 +30,5 @@ public class Chat {
 
     public void setSender(String sender) {
         this.sender = sender;
-    }
-
-    public Chat() {
     }
 }

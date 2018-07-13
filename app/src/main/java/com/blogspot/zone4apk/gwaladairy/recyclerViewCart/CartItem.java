@@ -13,6 +13,7 @@ public class CartItem {
     public Long price;
     public String quantity;
     public String image_url;
+    public String itemId;
 
     //default constructor
     public CartItem() {
@@ -35,8 +36,6 @@ public class CartItem {
     public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-
-    public String itemId;
 
     public String getImage_url() {
         return image_url;

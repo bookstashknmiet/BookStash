@@ -6,20 +6,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductViewHolder;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,21 +47,18 @@ import static java.lang.Thread.sleep;
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FirebaseAuth mAuth;
     boolean doubleBackToExitPressedOnce = false;
     View hView;
     TextView nav_user_email;
     TextView nav_user_name;
     ImageView nav_user_img;
-
     //Using RecylerView to show the shopping items
     RecyclerView recyclerView;
     FirebaseRecyclerAdapter adapter;
-
     //FirebaseDatabase
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,18 +110,17 @@ public class DashboardActivity extends AppCompatActivity
                                 if (which == 0) {
                                     //Added to cart
 
-                                    DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
+                                    DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).push();
 
                                     String pushId = cartDatabase.getKey();
 
                                     Map addToCartProductDetails = new HashMap();
                                     addToCartProductDetails.put("name", model.getName());
-                                    addToCartProductDetails.put("description",model.getDescription());
-                                    addToCartProductDetails.put("quantity",model.getQuantity());
-                                    addToCartProductDetails.put("price",model.getPrice());
-                                    addToCartProductDetails.put("image_url",model.getImageurl());
-                                    addToCartProductDetails.put("itemId",pushId);
-
+                                    addToCartProductDetails.put("description", model.getDescription());
+                                    addToCartProductDetails.put("quantity", model.getQuantity());
+                                    addToCartProductDetails.put("price", model.getPrice());
+                                    addToCartProductDetails.put("image_url", model.getImageurl());
+                                    addToCartProductDetails.put("itemId", pushId);
 
 
                                     cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
@@ -149,11 +144,11 @@ public class DashboardActivity extends AppCompatActivity
 
                                     Map addToWishProductDetails = new HashMap();
                                     addToWishProductDetails.put("name", model.getName());
-                                    addToWishProductDetails.put("description",model.getDescription());
-                                    addToWishProductDetails.put("quantity",model.getQuantity());
-                                    addToWishProductDetails.put("price",model.getPrice());
-                                    addToWishProductDetails.put("image_url",model.getImageurl());
-                                    addToWishProductDetails.put("itemId",pushId);
+                                    addToWishProductDetails.put("description", model.getDescription());
+                                    addToWishProductDetails.put("quantity", model.getQuantity());
+                                    addToWishProductDetails.put("price", model.getPrice());
+                                    addToWishProductDetails.put("image_url", model.getImageurl());
+                                    addToWishProductDetails.put("itemId", pushId);
 
                                     wishListDatabase.updateChildren(addToWishProductDetails, new DatabaseReference.CompletionListener() {
                                         @Override
@@ -286,8 +281,8 @@ public class DashboardActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_mycart) {
-           Intent intentCart = new Intent(DashboardActivity.this,CartActivity.class);
-           startActivity(intentCart);
+            Intent intentCart = new Intent(DashboardActivity.this, CartActivity.class);
+            startActivity(intentCart);
             return true;
         } else if (id == R.id.action_notification) {
             Toast.makeText(this, "Notification is pressed", Toast.LENGTH_SHORT).show();

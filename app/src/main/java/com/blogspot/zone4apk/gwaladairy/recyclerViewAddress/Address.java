@@ -8,6 +8,8 @@ public class Address {
     String state;
     String pincode;
     String landmark;
+    String mobile;
+    String itemId;
 
     public Address() {
     }
@@ -68,5 +70,20 @@ public class Address {
         this.landmark = landmark;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
 }
 

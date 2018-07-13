@@ -3,8 +3,8 @@ package com.blogspot.zone4apk.gwaladairy;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,11 +15,12 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class AboutActivity extends AppCompatActivity {
 
     ImageView imageViewLogo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        imageViewLogo=findViewById(R.id.imageView_logo);
+        imageViewLogo = findViewById(R.id.imageView_logo);
         Picasso.with(this)
                 .load(R.drawable.gwala)
                 .transform(new CropCircleTransformation())

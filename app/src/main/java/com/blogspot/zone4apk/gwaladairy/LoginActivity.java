@@ -1,9 +1,9 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +22,10 @@ public class LoginActivity extends AppCompatActivity {
     // To check the authenticity of this appplication the default username is "abc@gmail.com" and
     // default password is "123456"
     private static final String TAG = "LoginActivity";
-    private FirebaseAuth mAuth;
     EditText emailField;
     EditText passField;
     ProgressBar progressBar;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,8 +1,8 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,19 +15,15 @@ import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewChatSupport.Chat;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewChatSupport.ChatViewHolder;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -65,7 +61,7 @@ public class ChatSupportActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull Chat model) {
                 holder.setChatMessage(model.getMessage());
-                holder.setChatSender(model.getSender(),getApplicationContext());
+                holder.setChatSender(model.getSender(), getApplicationContext());
                 holder.setChatTimeStamp(model.getTimestamp());
             }
         };

@@ -23,7 +23,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         text_name = (TextView) itemView.findViewById(R.id.product_name);
         text_description = (TextView) itemView.findViewById(R.id.product_description);
         text_price = (TextView) itemView.findViewById(R.id.product_price);
-        text_quantity=(TextView) itemView.findViewById(R.id.product_quantity);
+        text_quantity = (TextView) itemView.findViewById(R.id.product_quantity);
         image = (ImageView) itemView.findViewById(R.id.product_image);
     }
 
@@ -47,7 +47,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void setText_quantity(String quantity){
+    public void setText_quantity(String quantity) {
         text_quantity.setText(quantity);
     }
 

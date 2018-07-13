@@ -94,6 +94,9 @@
         <activity
             android:name=".MyAddressActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditAddressActivity"
+            android:label="Add a new address" />
     </application>
 
 </manifest>
