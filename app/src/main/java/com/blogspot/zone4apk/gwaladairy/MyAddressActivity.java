@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewAddress.Address;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewAddress.AddressViewHolder;
@@ -24,12 +25,16 @@ public class MyAddressActivity extends AppCompatActivity {
 
     FirebaseRecyclerAdapter adapter;
     FirebaseAuth mAuth;
+    boolean addressSelectRequired = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_address);
 
+        addressSelectRequired = getIntent().getBooleanExtra("addressSelectRequired", false);
+        if (addressSelectRequired)
+            Toast.makeText(this, "Select the delivery address to complete your order", Toast.LENGTH_SHORT).show();
         mAuth = FirebaseAuth.getInstance();
         RecyclerView recyclerView = findViewById(R.id.recyclerview_my_address);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -49,7 +54,7 @@ public class MyAddressActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull AddressViewHolder holder, int position, @NonNull Address model) {
+            protected void onBindViewHolder(@NonNull AddressViewHolder holder, int position, @NonNull final Address model) {
                 holder.setName(model.getName());
                 holder.setAddressLine(
                         model.getAddressLine1(),
@@ -59,6 +64,16 @@ public class MyAddressActivity extends AppCompatActivity {
 
                 holder.setMobileNumber(model.getMobile());
                 holder.setItemId(model.getItemId());
+                if (addressSelectRequired)
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("ADDRESS_OBJECT", model);
+                            setResult(RESULT_OK, resultIntent);
+                            finish();
+                        }
+                    });
             }
         };
 

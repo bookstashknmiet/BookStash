@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.blogspot.zone4apk.gwaladairy.recyclerViewAddress.Address;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -96,7 +97,22 @@ public class CartActivity extends AppCompatActivity {
     }
 
     public void mCartCheckout(View view) {
-        startActivity(new Intent(getApplicationContext(), MyAddressActivity.class));
-        Toast.makeText(this, "Please choose an address to complete your order.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), MyAddressActivity.class);
+        intent.putExtra("addressSelectRequired", true);
+        startActivityForResult(intent, 1);
+        // Toast.makeText(this, "Please choose an address to complete your order.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Address address = (Address) data.getExtras().getSerializable("ADDRESS_OBJECT");
+                Toast.makeText(this, "Selected " + (address != null ? address.getName() : " ") + "'s address for this delivery", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failure selecting delivery address. Please try again.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

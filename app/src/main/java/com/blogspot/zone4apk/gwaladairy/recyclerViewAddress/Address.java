@@ -1,6 +1,8 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewAddress;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     String name;
     String addressLine1;
     String addressLine2;

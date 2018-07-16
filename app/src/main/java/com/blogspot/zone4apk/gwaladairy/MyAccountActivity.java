@@ -85,6 +85,8 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     public void mViewAllAddress(View view) {
-        startActivity(new Intent(getApplicationContext(), MyAddressActivity.class));
+        Intent intent = new Intent(getApplicationContext(), MyAddressActivity.class);
+        intent.putExtra("addressSelectRequired", false);
+        startActivity(intent);
     }
 }
