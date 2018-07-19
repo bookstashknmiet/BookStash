@@ -61,6 +61,7 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/txtViewItemsCount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -71,6 +72,7 @@
                                 android:textSize="12sp" />
 
                             <TextView
+                                android:id="@+id/totalPrice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
@@ -132,6 +134,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/amountPayable"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
@@ -145,44 +148,47 @@
                         </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/continuePannel"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_gravity="bottom"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#fff"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/finalPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:padding="16dp"
+                            android:text="\u20B9 845"
+                            android:textColor="#000"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="12dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorPrimary"
+                            android:onClick="mCartCheckout"
+                            android:text="Continue"
+                            android:textAllCaps="true"
+                            android:textColor="#fff"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
             </LinearLayout>
         </ScrollView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_gravity="bottom"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:padding="16dp"
-                    android:text="\u20B9 845"
-                    android:textColor="#000"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="12dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:onClick="mCartCheckout"
-                    android:text="Continue"
-                    android:textAllCaps="true"
-                    android:textColor="#fff"
-                    android:textSize="15sp" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
     </FrameLayout>
 </android.support.constraint.ConstraintLayout>

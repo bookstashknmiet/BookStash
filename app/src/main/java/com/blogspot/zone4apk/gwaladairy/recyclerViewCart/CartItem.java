@@ -15,6 +15,7 @@ public class CartItem {
     public String image_url;
     public String itemId;
 
+
     //default constructor
     public CartItem() {
 

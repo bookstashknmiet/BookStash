@@ -3,10 +3,13 @@ package com.blogspot.zone4apk.gwaladairy.recyclerViewCart;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blogspot.zone4apk.gwaladairy.R;
@@ -32,6 +35,7 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
     TextView text_price;
     TextView text_quantity;
     ImageView image;
+    Spinner spinner;
 
     //Buttons Setup
     TextView removeItem;
@@ -44,9 +48,22 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
     String imageUrl;
     Long itemPrice;
 
-    public CartItemViewHolder(View itemView) {
+    public static int qty;
+
+    //Removing Stuffs--------------------
+    TextView totalPrice, amountPayable,finalPrice,itemsCount;
+    CardView continuePannel;
+
+    int itemCount;
+
+    public CartItemViewHolder(View itemView , Context context) {
         super(itemView);
         mAuth = FirebaseAuth.getInstance();
+
+        spinner = itemView.findViewById(R.id.quantitySpinner);
+        ArrayAdapter<CharSequence> productQuantity= ArrayAdapter.createFromResource(context,R.array.product_quantity,android.R.layout.simple_spinner_item);
+       // ArrayAdapter productQuantity= new ArrayAdapter(this,android.R.layout.simple_spinner_item,new Integer[]{1,2});
+        spinner.setAdapter(productQuantity);
 
         text_name = (TextView) itemView.findViewById(R.id.product_name_cart);
         text_description = (TextView) itemView.findViewById(R.id.product_description_cart);
@@ -61,9 +78,7 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
                 DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString());
                 mWishListDataBase.child(itemId).removeValue();
 
-                DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
-
-                String pushId = cartDatabase.getKey();
+                DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).child(itemId);
 
                 Map addToCartProductDetails = new HashMap();
                 addToCartProductDetails.put("name", text_name.getText());
@@ -71,7 +86,7 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
                 addToCartProductDetails.put("quantity", text_quantity.getText());
                 addToCartProductDetails.put("price", itemPrice);
                 addToCartProductDetails.put("image_url", imageUrl);
-                addToCartProductDetails.put("itemId", pushId);
+                addToCartProductDetails.put("itemId", itemId);
 
                 cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                     @Override
@@ -92,9 +107,25 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
                 //OnClick Handler for Delete button
                 DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString());
                 mWishListDataBase.child(itemId).removeValue();
+                removing();
             }
         });
 
+
+    }
+
+    private void removing() {
+        itemsCount.setText("Price ("+(--qty)+"items)");
+        if(qty==0 ){
+            continuePannel.setVisibility(View.GONE);
+        }else{
+            continuePannel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setViews(TextView itemsCount,CardView continuePannel){
+        this.itemsCount = itemsCount;
+        this.continuePannel =continuePannel;
 
     }
 

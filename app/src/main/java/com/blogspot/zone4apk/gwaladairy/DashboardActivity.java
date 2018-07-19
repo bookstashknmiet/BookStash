@@ -31,10 +31,12 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -59,6 +61,8 @@ public class DashboardActivity extends AppCompatActivity
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
+
+    String quantity = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +114,22 @@ public class DashboardActivity extends AppCompatActivity
                                 if (which == 0) {
                                     //Added to cart
 
-                                    DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).push();
+
+
+                                    DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).child(model.getProductId());
+
+                                    cartDatabase.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            quantity = (String) dataSnapshot.child("quantity").getValue();
+
+                                            }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
 
                                     String pushId = cartDatabase.getKey();
 
@@ -121,6 +140,7 @@ public class DashboardActivity extends AppCompatActivity
                                     addToCartProductDetails.put("price", model.getPrice());
                                     addToCartProductDetails.put("image_url", model.getImageurl());
                                     addToCartProductDetails.put("itemId", pushId);
+
 
 
                                     cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
@@ -138,7 +158,7 @@ public class DashboardActivity extends AppCompatActivity
                                 if (which == 1) {
                                     //Added to wish list
 
-                                    DatabaseReference wishListDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
+                                    DatabaseReference wishListDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).child(model.getProductId());
 
                                     String pushId = wishListDatabase.getKey();
 

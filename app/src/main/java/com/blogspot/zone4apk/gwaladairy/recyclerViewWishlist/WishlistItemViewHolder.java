@@ -65,8 +65,8 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
                 DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid());
                 mWishListDataBase.child(itemId).removeValue();
 
-                DatabaseReference mCartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).push();
-                String pushId = mCartDatabase.getKey();
+                DatabaseReference mCartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).child(itemId);
+
 
                 Map addToCartProductDetails = new HashMap();
                 addToCartProductDetails.put("name", text_name.getText());
@@ -74,7 +74,7 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
                 addToCartProductDetails.put("quantity", text_quantity.getText());
                 addToCartProductDetails.put("price", itemPrice);
                 addToCartProductDetails.put("image_url", imageUrl);
-                addToCartProductDetails.put("itemId", pushId);
+                addToCartProductDetails.put("itemId", itemId);
 
                 mCartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                     @Override
