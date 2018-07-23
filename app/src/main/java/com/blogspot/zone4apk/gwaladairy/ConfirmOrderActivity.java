@@ -2,13 +2,25 @@ package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewAddress.Address;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ConfirmOrderActivity extends AppCompatActivity {
@@ -24,14 +36,18 @@ public class ConfirmOrderActivity extends AppCompatActivity {
     TextView deliveryCharge;
     TextView amountPayable;
 
+    FirebaseAuth mAuth;
+    private Address address;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_order);
+        mAuth = FirebaseAuth.getInstance();
         Intent orderIntent = getIntent();
-        Address address = (Address) Objects.requireNonNull(orderIntent.getExtras()).getSerializable("addressdataorder");
-        Bundle bundle = orderIntent.getExtras();
+        address = (Address) Objects.requireNonNull(orderIntent.getExtras()).getSerializable("addressdataorder");
+        bundle = orderIntent.getExtras();
         Log.d("TAG", String.valueOf(address.getName()));
 
         //Initializing views
@@ -84,5 +100,54 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         //Enter code to place order
         //Put all data in cart activity to orders database
         //Remove all data in cart database
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-hhmmss");
+        String timeStamp = simpleDateFormat.format(new Date());
+
+        DatabaseReference orderDatabase = FirebaseDatabase.getInstance().getReference().child("OrderDatabase")
+                .child(mAuth.getCurrentUser().getUid())
+                .child(timeStamp);
+        orderDatabase.keepSynced(true);
+
+        DatabaseReference orderAddress = orderDatabase.child("deliveryAddress");
+        DatabaseReference orderPaymentDetail = orderDatabase.child("paymentDetail");
+        final DatabaseReference orderProduct = orderDatabase.child("productsOrdered");
+
+        //Setting Delivery Address--------------------------------------------------
+        orderAddress.child(address.getItemId()).setValue(address);
+
+        //Setting Payment Details---------------------------------------------------
+        Map payment = new HashMap();
+        payment.put("itemCount", bundle.getInt("itemcountorder"));
+        payment.put("totalPrice", bundle.getLong("totalpriceorder"));
+        payment.put("deliveryCharges", bundle.getLong("deliverychargeorder"));
+        payment.put("amountPaid", bundle.getLong("deliverychargeorder") + bundle.getLong("totalpriceorder"));
+        orderPaymentDetail.updateChildren(payment);
+
+        //Setting Products Ordered---------------------------------------------------
+        final DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase")
+                .child(mAuth.getCurrentUser().getUid());
+
+        cartDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> productList = dataSnapshot.getChildren();
+                for (DataSnapshot product : productList) {
+                    orderProduct.child(product.getKey()).setValue(product.getValue());
+                    // Log.i("products: ", String.valueOf(product.getKey()));
+                }
+                cartDatabase.removeValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //Do nothing
+                Toast.makeText(ConfirmOrderActivity.this, "Please try again...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+        finish();
+        Toast.makeText(this, "Order placed successfully", Toast.LENGTH_SHORT).show();
+
     }
 }

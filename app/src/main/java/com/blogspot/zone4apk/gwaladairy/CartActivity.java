@@ -144,6 +144,7 @@ public class CartActivity extends AppCompatActivity {
                 bundle.putLong("deliverychargeorder", delivery);
                 moveToPaymentIntent.putExtras(bundle);
                 startActivity(moveToPaymentIntent);
+                finish();
 
             } else {
                 Toast.makeText(this, "Failure selecting delivery address. Please try again.", Toast.LENGTH_SHORT).show();
