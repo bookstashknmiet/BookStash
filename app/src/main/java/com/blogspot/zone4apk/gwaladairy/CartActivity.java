@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,12 +135,25 @@ public class CartActivity extends AppCompatActivity {
                 Address address = (Address) data.getExtras().getSerializable("ADDRESS_OBJECT");
                 Toast.makeText(this, "Selected " + (address != null ? address.getName() : " ") + "'s address for this delivery", Toast.LENGTH_SHORT).show();
 
+                //Now we need to send address data of placed order to ConfirmOrderActivity
+                Intent moveToPaymentIntent = new Intent(getApplicationContext(), ConfirmOrderActivity.class);
+                moveToPaymentIntent.putExtra("addressdataorder", data.getExtras().getSerializable("ADDRESS_OBJECT"));
+                Bundle bundle = new Bundle();
+                bundle.putInt("itemcountorder", totalItemsCount);
+                bundle.putLong("totalpriceorder", totalPrice);
+                bundle.putLong("deliverychargeorder", delivery);
+                moveToPaymentIntent.putExtras(bundle);
+                startActivity(moveToPaymentIntent);
+
             } else {
                 Toast.makeText(this, "Failure selecting delivery address. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    int totalItemsCount;
+    long totalPrice;
+    long delivery;
 
     protected void calculateTotal() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
@@ -151,23 +163,22 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> productlist = dataSnapshot.getChildren();
-                long totalPrice = 0L;
-                int totalItemsCount = 0;//for views
-                long delivery = 15L;
+                totalPrice = 0L;
+                totalItemsCount = 0;//for views
+                delivery = 15L;
                 for (DataSnapshot product : productlist) {
                     long productPrice = Long.parseLong(String.valueOf(product.child("price").getValue()));
                     long productCount = Long.parseLong(String.valueOf(product.child("product_count").getValue()));
                     long effectivePrice = productPrice * productCount;
 
-                    Log.i("effective price of item" + (String) product.child("name").getValue(), "" + effectivePrice);
                     totalPrice += effectivePrice;//calculating total price
                     totalItemsCount += 1;//calculating total item count
                 }
-                Log.i("Total price", "" + totalPrice);
                 finalPrice.setText("\u20B9 " + (totalPrice + delivery));
-                deliveryCharge.setText("\u20B9" + delivery);
+                deliveryCharge.setText("\u20B9 " + delivery);
                 amountPayable.setText("\u20B9 " + (totalPrice + delivery));
                 priceAllItems.setText("\u20B9 " + totalPrice);
+
                 switch (totalItemsCount) {
                     case 0:
                         //hiding views when there is no item in cart.

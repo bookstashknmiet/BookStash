@@ -1,6 +1,8 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewCart;
 
-public class CartItem {
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
     //database fields
     public String name;
     public String description;

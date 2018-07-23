@@ -97,6 +97,13 @@
         <activity
             android:name=".EditAddressActivity"
             android:label="Add a new address" />
+        <activity
+            android:name=".ConfirmOrderActivity"
+            android:label="Confirm Order">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CartActivity" />
+        </activity>
     </application>
 
 </manifest>
