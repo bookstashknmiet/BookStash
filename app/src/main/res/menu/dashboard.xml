@@ -9,11 +9,5 @@
         android:orderInCategory="100"
         android:title="My Cart"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_notification"
-        android:name="Notification"
-        android:icon="@drawable/ic_notifications"
-        android:orderInCategory="200"
-        android:title="Notification"
-        app:showAsAction="ifRoom" />
+
 </menu>

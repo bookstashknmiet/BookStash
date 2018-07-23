@@ -1,19 +1,14 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewCart;
 
-/**
- * Created by AMIT on 7/9/2018.
- */
-
 public class CartItem {
-
-
     //database fields
     public String name;
     public String description;
-    public Long price;
+    public long price;
     public String quantity;
     public String image_url;
     public String itemId;
+    public long product_count;
 
 
     //default constructor
@@ -54,7 +49,7 @@ public class CartItem {
         this.description = description;
     }
 
-    public Long getPrice() {
+    public long getPrice() {
         return price;
     }
 
@@ -68,5 +63,13 @@ public class CartItem {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public long getProduct_count() {
+        return product_count;
+    }
+
+    public void setProduct_count(int product_count) {
+        this.product_count = product_count;
     }
 }

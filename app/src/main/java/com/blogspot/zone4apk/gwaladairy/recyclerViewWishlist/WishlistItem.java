@@ -1,9 +1,5 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist;
 
-/**
- * Created by AMIT on 7/10/2018.
- */
-
 public class WishlistItem {
 
     //Database fields

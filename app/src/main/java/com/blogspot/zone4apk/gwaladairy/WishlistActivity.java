@@ -9,7 +9,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItemViewHolder;
@@ -62,21 +61,9 @@ public class WishlistActivity extends AppCompatActivity {
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
                 holder.setImage(model.getImage_url(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
-
                 holder.setItemId(model.getItemId());
                 holder.setPrice(model.getPrice());
-
-                //----------Recycler Click Event------------
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //On Click Events Goes here
-                        Toast.makeText(WishlistActivity.this, "Item is clicked", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
-
-
         };
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);

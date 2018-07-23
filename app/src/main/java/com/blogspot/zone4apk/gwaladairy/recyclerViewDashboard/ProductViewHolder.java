@@ -17,6 +17,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     TextView text_price;
     TextView text_quantity;
     ImageView image;
+    String itemId;
 
     public ProductViewHolder(View itemView) {
         super(itemView);
@@ -45,6 +46,10 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
                 .transform(new CropSquareTransformation())
                 .into(image);
 
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public void setText_quantity(String quantity) {

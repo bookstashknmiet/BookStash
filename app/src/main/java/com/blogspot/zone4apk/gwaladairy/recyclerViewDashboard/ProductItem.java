@@ -6,17 +6,15 @@ public class ProductItem {
     private String description;
     private String imageurl;
     private String quantity;
-    private String productId;
+    private String itemId;
 
 
-
-
-    public String getProductId() {
-        return productId;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public ProductItem() {

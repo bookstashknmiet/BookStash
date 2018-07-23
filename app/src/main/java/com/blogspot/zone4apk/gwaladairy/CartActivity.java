@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +21,12 @@ import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -35,17 +37,19 @@ public class CartActivity extends AppCompatActivity {
     //FirebaseDatabase
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-
     FirebaseAuth mAuth;
 
-    Long totalProductPrice=0L;
 
-    int itemCount=0;
+    //Price Details TextViews
+    TextView finalPrice;
+    TextView amountPayable;
+    TextView deliveryCharge;
+    TextView priceAllItems;
+    TextView itemsCount;
 
-    private TextView totalPrice, amountPayable,finalPrice,itemsCount;
-
-    CardView continuePannel;
-
+    //FrameLayoutCart
+    FrameLayout frameLayoutContent;
+    FrameLayout frameLayoutNoContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +57,24 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
         mAuth = FirebaseAuth.getInstance();
 
-        //Price Setting-------------------------------------------------------
+        //Price TextViews initialization
+        finalPrice = findViewById(R.id.txt_finalPrice);
+        amountPayable = findViewById(R.id.txt_amountPayable);
+        deliveryCharge = findViewById(R.id.txt_delivery_charges);
+        priceAllItems = findViewById(R.id.txt_totalPrice_all_item);
+        itemsCount = findViewById(R.id.txtViewItemsCount);
 
-        totalPrice = findViewById(R.id.totalPrice);
-        amountPayable = findViewById(R.id.amountPayable);
-        finalPrice = findViewById(R.id.finalPrice);
-        itemsCount= findViewById(R.id.txtViewItemsCount);
+        //FrameLayout initialization
+        frameLayoutNoContent = findViewById(R.id.frmamelayout_nocontent_cart);
+        frameLayoutContent = findViewById(R.id.framelayout_content_cart);
 
-        //Conitune----------------
-        continuePannel = findViewById(R.id.continuePannel);
-        continuePannel.setVisibility(View.GONE);
+        //hiding views when there is no item in cart.
+        frameLayoutNoContent.setVisibility(View.VISIBLE);
+        frameLayoutContent.setVisibility(View.GONE);
 
         //Setting recycler view-----------------------------------------------------------
         recyclerView = findViewById(R.id.recyclerview_cart);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid());
         databaseReference.keepSynced(true);
@@ -78,67 +86,27 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public CartItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false);
-                return new CartItemViewHolder(view,getApplicationContext());
+                return new CartItemViewHolder(view, getApplicationContext());
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final CartItemViewHolder holder, int position, @NonNull final CartItem model) {
-
-
-                itemCount++;
 
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
                 holder.setImage(model.getImage_url(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
-
-                totalProductPrice = totalProductPrice + model.getPrice();
-
-                totalPrice.setText(""+totalProductPrice);
-                amountPayable.setText(""+totalProductPrice);
-                finalPrice.setText(""+totalProductPrice);
-                itemsCount.setText("Price ("+itemCount+" items)");
-
                 holder.setItemId(model.getItemId());
                 holder.setPrice(model.getPrice());
-
-                //removing work------------------
-                Log.i("Items",""+itemCount);
-                holder.setViews(itemsCount, continuePannel);
-                CartItemViewHolder.qty = itemCount;
-
-                if(CartItemViewHolder.qty==0 ){
-                    continuePannel.setVisibility(View.GONE);
-                }else{
-                    continuePannel.setVisibility(View.VISIBLE);
-                }
-
-
-
-
-                //----------Recycler Click Event------------
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //On Click Events Goes here
-                        Toast.makeText(CartActivity.this, "Item is clicked", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                holder.setProductCount(model.getProduct_count());
             }
         };
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-//        if(adapter!=null){
-//            continuePannel.setVisibility(View.VISIBLE);
-//        }else{
-//            continuePannel.setVisibility(View.INVISIBLE);
-//        }
 
-
-
-
+        calculateTotal();
     }
 
     @Override
@@ -166,12 +134,67 @@ public class CartActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Address address = (Address) data.getExtras().getSerializable("ADDRESS_OBJECT");
-                totalProductPrice=0L;
                 Toast.makeText(this, "Selected " + (address != null ? address.getName() : " ") + "'s address for this delivery", Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(this, "Failure selecting delivery address. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    protected void calculateTotal() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child("CartDatabase").child(mAuth.getCurrentUser().getUid());
+        reference.keepSynced(true);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> productlist = dataSnapshot.getChildren();
+                long totalPrice = 0L;
+                int totalItemsCount = 0;//for views
+                long delivery = 15L;
+                for (DataSnapshot product : productlist) {
+                    long productPrice = Long.parseLong(String.valueOf(product.child("price").getValue()));
+                    long productCount = Long.parseLong(String.valueOf(product.child("product_count").getValue()));
+                    long effectivePrice = productPrice * productCount;
+
+                    Log.i("effective price of item" + (String) product.child("name").getValue(), "" + effectivePrice);
+                    totalPrice += effectivePrice;//calculating total price
+                    totalItemsCount += 1;//calculating total item count
+                }
+                Log.i("Total price", "" + totalPrice);
+                finalPrice.setText("\u20B9 " + (totalPrice + delivery));
+                deliveryCharge.setText("\u20B9" + delivery);
+                amountPayable.setText("\u20B9 " + (totalPrice + delivery));
+                priceAllItems.setText("\u20B9 " + totalPrice);
+                switch (totalItemsCount) {
+                    case 0:
+                        //hiding views when there is no item in cart.
+                        frameLayoutNoContent.setVisibility(View.VISIBLE);
+                        frameLayoutContent.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        //showing view when there is any item in cart.
+                        frameLayoutNoContent.setVisibility(View.GONE);
+                        frameLayoutContent.setVisibility(View.VISIBLE);
+                        itemsCount.setText("Price (1 item)");
+                        break;
+                    default:
+                        //showing view when there is any item in cart.
+                        frameLayoutNoContent.setVisibility(View.GONE);
+                        frameLayoutContent.setVisibility(View.VISIBLE);
+                        itemsCount.setText("Price (" + totalItemsCount + " items)");
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                finish();
+                Toast.makeText(CartActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

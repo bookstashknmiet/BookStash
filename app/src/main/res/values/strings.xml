@@ -22,18 +22,5 @@
     <string name="helpline_office">Shivpuri \nGali No. 2 \nModinagar \nGhaziabad - 201204.</string>
     <string name="chat_support">Chat now with support executive.</string>
 
-    <!--Spinner Code from here for putting Values-->
-    <string-array name="product_quantity">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
 
 </resources>

@@ -86,6 +86,7 @@ public class DashboardActivity extends AppCompatActivity
             public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
                 return new ProductViewHolder(view);
+
             }
 
             @Override
@@ -95,43 +96,33 @@ public class DashboardActivity extends AppCompatActivity
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
                 holder.setImage(model.getImageurl(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
+                holder.setItemId(model.getItemId());
+
 
                 //----------Recycler Click Event------------
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         CharSequence options[] = new CharSequence[]{"Add to Cart", "Add to Wishlist"};
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
                         builder.setTitle("Select Option");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-                                //click event
-
+                                //click event handler
                                 if (which == 0) {
                                     //Added to cart
-
-
-
-                                    DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).child(model.getProductId());
-
+                                    DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).child(model.getItemId());
                                     cartDatabase.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             quantity = (String) dataSnapshot.child("quantity").getValue();
-
-                                            }
+                                        }
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                         }
                                     });
-
-                                    String pushId = cartDatabase.getKey();
 
                                     Map addToCartProductDetails = new HashMap();
                                     addToCartProductDetails.put("name", model.getName());
@@ -139,42 +130,35 @@ public class DashboardActivity extends AppCompatActivity
                                     addToCartProductDetails.put("quantity", model.getQuantity());
                                     addToCartProductDetails.put("price", model.getPrice());
                                     addToCartProductDetails.put("image_url", model.getImageurl());
-                                    addToCartProductDetails.put("itemId", pushId);
-
-
+                                    addToCartProductDetails.put("itemId", model.getItemId());
+                                    addToCartProductDetails.put("product_count", 1);
 
                                     cartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                                         @Override
                                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-
                                             if (databaseError == null) {
+                                                //If database update was successful.
                                                 Toast.makeText(DashboardActivity.this, "Item is Added to cart", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
-
                                 }
 
                                 if (which == 1) {
                                     //Added to wish list
-
-                                    DatabaseReference wishListDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).child(model.getProductId());
-
-                                    String pushId = wishListDatabase.getKey();
-
+                                    DatabaseReference wishListDatabase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString()).child(model.getItemId());
                                     Map addToWishProductDetails = new HashMap();
                                     addToWishProductDetails.put("name", model.getName());
                                     addToWishProductDetails.put("description", model.getDescription());
                                     addToWishProductDetails.put("quantity", model.getQuantity());
                                     addToWishProductDetails.put("price", model.getPrice());
                                     addToWishProductDetails.put("image_url", model.getImageurl());
-                                    addToWishProductDetails.put("itemId", pushId);
-
+                                    addToWishProductDetails.put("itemId", model.getItemId());
                                     wishListDatabase.updateChildren(addToWishProductDetails, new DatabaseReference.CompletionListener() {
                                         @Override
                                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-
                                             if (databaseError == null) {
+                                                //If database update was successful
                                                 Toast.makeText(DashboardActivity.this, "Item is Added to WishList", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -182,14 +166,10 @@ public class DashboardActivity extends AppCompatActivity
                                 }
                             }
                         });
-
                         builder.show();
-
                     }
                 });
             }
-
-
         };
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
@@ -236,11 +216,11 @@ public class DashboardActivity extends AppCompatActivity
             nav_user_name.setText(user.getDisplayName());
             nav_user_email.setVisibility(View.VISIBLE);
             nav_user_email.setText(user.getEmail());
-           /* Picasso.with(this)
-                    .load(user.getPhotoUrl().toString()).transform(new CropCircleTransformation())
-                    .into(nav_user_img);
-                    */
-            //since we do not have user image right now.
+//            Picasso.with(this)
+//                    .load(user.getPhotoUrl().toString()).transform(new CropCircleTransformation())
+//                    .into(nav_user_img);
+// since we do not have user image right now.
+
             Picasso.with(this)
                     .load(R.mipmap.ic_launcher)
                     .transform(new CropCircleTransformation())
@@ -304,11 +284,7 @@ public class DashboardActivity extends AppCompatActivity
             Intent intentCart = new Intent(DashboardActivity.this, CartActivity.class);
             startActivity(intentCart);
             return true;
-        } else if (id == R.id.action_notification) {
-            Toast.makeText(this, "Notification is pressed", Toast.LENGTH_SHORT).show();
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -317,7 +293,6 @@ public class DashboardActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_account) {
             startActivity(new Intent(getApplicationContext(), MyAccountActivity.class));
         } else if (id == R.id.nav_help) {
@@ -341,7 +316,7 @@ public class DashboardActivity extends AppCompatActivity
     }
 
 
-    //share app
+    //share app with appshare popup
     public void mShare() {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
