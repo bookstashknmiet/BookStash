@@ -128,7 +128,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         final DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase")
                 .child(mAuth.getCurrentUser().getUid());
 
-        ValueEventListener listener = cartDatabase.addValueEventListener(new ValueEventListener() {
+        cartDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> productList = dataSnapshot.getChildren();
@@ -144,11 +144,9 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                 Toast.makeText(ConfirmOrderActivity.this, "Please try again...", Toast.LENGTH_SHORT).show();
             }
         });
-        cartDatabase.removeEventListener(listener);
         cartDatabase.removeValue();
         startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         finish();
         Toast.makeText(this, "Order placed successfully", Toast.LENGTH_SHORT).show();
-
     }
 }
