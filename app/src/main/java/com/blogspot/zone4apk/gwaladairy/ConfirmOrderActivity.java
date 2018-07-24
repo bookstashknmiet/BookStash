@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewAddress.Address;
+import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -127,15 +128,14 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         final DatabaseReference cartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase")
                 .child(mAuth.getCurrentUser().getUid());
 
-        cartDatabase.addValueEventListener(new ValueEventListener() {
+        ValueEventListener listener = cartDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> productList = dataSnapshot.getChildren();
                 for (DataSnapshot product : productList) {
-                    orderProduct.child(product.getKey()).setValue(product.getValue());
-                    // Log.i("products: ", String.valueOf(product.getKey()));
+                    CartItem cartItem = product.getValue(CartItem.class);
+                    orderProduct.child(cartItem.getItemId()).setValue(cartItem);
                 }
-                cartDatabase.removeValue();
             }
 
             @Override
@@ -144,7 +144,8 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                 Toast.makeText(ConfirmOrderActivity.this, "Please try again...", Toast.LENGTH_SHORT).show();
             }
         });
-
+        cartDatabase.removeEventListener(listener);
+        cartDatabase.removeValue();
         startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         finish();
         Toast.makeText(this, "Order placed successfully", Toast.LENGTH_SHORT).show();
