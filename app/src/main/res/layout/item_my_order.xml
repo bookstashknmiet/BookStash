@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textStyle="bold"
             android:padding="4dp"
             android:text="Order Id"
             android:textSize="18dp" />

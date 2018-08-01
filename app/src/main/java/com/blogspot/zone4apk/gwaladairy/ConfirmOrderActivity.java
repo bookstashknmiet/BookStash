@@ -101,7 +101,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         //Enter code to place order
         //Put all data in cart activity to orders database
         //Remove all data in cart database
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-hhmmss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         String timeStamp = simpleDateFormat.format(new Date());
 
         DatabaseReference orderDatabase = FirebaseDatabase.getInstance().getReference().child("OrderDatabase")

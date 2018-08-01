@@ -8,5 +8,22 @@ import java.io.Serializable;
 
 public class MyOrderItem {
 
+ String orderNo;
+ String time;
 
+ public String getOrderNo() {
+  return orderNo;
+ }
+
+ public void setOrderNo(String orderNo) {
+  this.orderNo = orderNo;
+ }
+
+ public String getTime() {
+  return time;
+ }
+
+ public void setTime(String time) {
+  this.time = time;
+ }
 }

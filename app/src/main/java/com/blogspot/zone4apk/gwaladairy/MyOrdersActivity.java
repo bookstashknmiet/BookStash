@@ -4,20 +4,33 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrders.MyOrderItem;
+import com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrders.MyOrderItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class MyOrdersActivity extends AppCompatActivity {
@@ -32,9 +45,9 @@ public class MyOrdersActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
 
 
-    ArrayAdapter<String> adapterOrder ;
 
-    ArrayList<String> orderno = new ArrayList<String>();
+
+    ArrayList<MyOrderItem> orderno = new ArrayList<MyOrderItem>();
     ListView listOrders;
 
     @Override
@@ -45,10 +58,10 @@ public class MyOrdersActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 //        //Setting recycler view-----------------------------------------------------------
-//        recyclerView = findViewById(R.id.recyclerview_myOrders);entUser().getUid());
+//        recyclerView = findViewById(R.id.recyclerview_myOrders);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        firebaseDatabase = FirebaseDatabase.getInstance();
-//        databaseReference = firebaseDatabase.getReference().child("OrderDatabase").child(mAuth.getCurr
+//        databaseReference = firebaseDatabase.getReference().child("OrderDatabase").child(mAuth.getCurrentUser().getUid());
 //        databaseReference.keepSynced(true);
 //        Query query = databaseReference.limitToLast(50);
 //        FirebaseRecyclerOptions<MyOrderItem> options = new FirebaseRecyclerOptions.Builder<MyOrderItem>().setQuery(query, MyOrderItem.class).build();
@@ -64,7 +77,7 @@ public class MyOrdersActivity extends AppCompatActivity {
 //            @Override
 //            protected void onBindViewHolder(@NonNull final MyOrderItemViewHolder holder, int position, @NonNull final MyOrderItem model) {
 //
-//                Toast.makeText(MyOrdersActivity.this, "itemFound", Toast.LENGTH_SHORT).show();
+//
 //
 //            }
 //        };
@@ -92,18 +105,41 @@ public class MyOrdersActivity extends AppCompatActivity {
         //Test-----------
         listOrders = findViewById(R.id.listViewTest);
 
-        adapterOrder = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,orderno);
+        final MyOrderItemViewHolder myOrderItemViewHolder = new MyOrderItemViewHolder(this, R.layout.item_my_order, orderno);
 
-        listOrders.setAdapter(adapterOrder);
+        listOrders.setAdapter(myOrderItemViewHolder);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("OrderDatabase").child(mAuth.getCurrentUser().getUid());
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+                MyOrderItem  details = new MyOrderItem();
+
                 Log.i("Title",""+dataSnapshot.getKey().toString());
                 int productCount = (int) dataSnapshot.child("productsOrdered").getChildrenCount();
 
-                adapterOrder.add("You have ordered "+ productCount+" items at date "+dataSnapshot.getKey().toString());
+                String dateStr = dataSnapshot.getKey().toString();
+                Date date = null;
+                try {
+                    date = new SimpleDateFormat("yyyyMMdd-hhmmss").parse(dateStr);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                details.setOrderNo(dataSnapshot.getKey().toString());
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy hh:mm a");
+                String timeStamp = simpleDateFormat.format(date);
+
+
+
+                Log.i("Date",""+timeStamp);
+                details.setTime(timeStamp);
+
+                orderno.add(details);
+
+                myOrderItemViewHolder.notifyDataSetChanged();
 
             }
 
