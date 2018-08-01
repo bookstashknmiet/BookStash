@@ -104,6 +104,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CartActivity" />
         </activity>
+        <activity
+            android:name=".VerifyAccountActivity"
+            android:label="Verify your email" />
     </application>
 
 </manifest>
