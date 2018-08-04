@@ -174,6 +174,24 @@ public class DashboardActivity extends AppCompatActivity
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
+        //showing number of items in the view
+        //counting total no of items and updating no content page accordingly
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long i = dataSnapshot.getChildrenCount();
+                //showing view when there is any item in cart.
+                if (i == 0) {//hiding views when there is no item in cart.
+
+                } else
+                    Toast.makeText(DashboardActivity.this, String.format("Showing %d products", i), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
 
         //AppDrawer-----------------------------------------------------
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

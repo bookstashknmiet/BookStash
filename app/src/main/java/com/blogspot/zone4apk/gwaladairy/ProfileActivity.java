@@ -134,10 +134,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //restricting user from using back button
+    }
+
     private void updateUI(Boolean success) {
         if (success) {
             finish();
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            startActivity(new Intent(getApplicationContext(), VerifyAccountActivity.class));
         } else
             Toast.makeText(this, "Try again later.", Toast.LENGTH_SHORT).show();
     }

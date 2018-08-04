@@ -1,5 +1,6 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,7 +9,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     EditText emailField;
     EditText passField;
-    ProgressBar progressBar;
+    ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
 
     @Override
@@ -35,7 +35,8 @@ public class LoginActivity extends AppCompatActivity {
 
         emailField = findViewById(R.id.user_email);
         passField = findViewById(R.id.user_password);
-        progressBar = findViewById(R.id.progress_bar);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please wait");
 
 
         findViewById(R.id.sign_in).setOnClickListener(new View.OnClickListener() {
@@ -104,13 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-                        // [START_EXCLUDE]
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
-                        }
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
         // [END sign_in_with_email]
@@ -118,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showProgressDialog() {
         //shows circular progressbar
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog.show();
         findViewById(R.id.sign_in).setVisibility(View.GONE);
     }
 
@@ -126,17 +121,23 @@ public class LoginActivity extends AppCompatActivity {
         //deals with the changes occuring due to valid user
         hideProgressDialog();
         if (user != null) {
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            if (mAuth.getCurrentUser().isEmailVerified())
+                startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            else
+                startActivity(new Intent(getApplicationContext(), VerifyAccountActivity.class));
             this.finish();
         }
     }
 
     private void hideProgressDialog() {
         //hides circular progressbar
-        progressBar.setVisibility(View.GONE);
+        progressDialog.dismiss();
         findViewById(R.id.sign_in).setVisibility(View.VISIBLE);
 
     }
 
 
+    public void mForgotPassword(View view) {
+        startActivity(new Intent(getApplicationContext(), ForgotPasswordActivity.class));
+    }
 }

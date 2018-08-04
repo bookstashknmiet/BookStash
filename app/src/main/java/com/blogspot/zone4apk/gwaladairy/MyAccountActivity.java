@@ -77,7 +77,7 @@ public class MyAccountActivity extends AppCompatActivity {
                         FirebaseUser currentUser = mAuth.getCurrentUser();
                         updateUi(currentUser);
                         Toast.makeText(getApplicationContext(), "Signed out successfully.", Toast.LENGTH_SHORT).show();
-                        finish();
+                        finishAffinity();
                         startActivity(new Intent(getApplicationContext(), WelcomeFlashActivity.class));
                     }
                 })

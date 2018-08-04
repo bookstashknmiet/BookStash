@@ -194,7 +194,7 @@
                 android:padding="8dp"
                 android:text="Move to wishlist"
                 android:textAllCaps="true"
-                android:textColor="?android:attr/colorAccent"
+                android:textColor="?android:attr/colorPrimaryDark"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
