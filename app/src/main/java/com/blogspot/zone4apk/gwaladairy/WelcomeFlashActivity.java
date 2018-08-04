@@ -1,8 +1,8 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +30,10 @@ public class WelcomeFlashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     if (currentUser != null)
-                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        if (mAuth.getCurrentUser().isEmailVerified())
+                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), VerifyAccountActivity.class));
                     else
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();

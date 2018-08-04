@@ -9,16 +9,19 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class WishlistActivity extends AppCompatActivity {
 
@@ -30,6 +33,9 @@ public class WishlistActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
+    //Content Frames
+    FrameLayout frameLayoutContent;
+    FrameLayout frameLayoutNoContent;
     FirebaseAuth mAuth;
 
     @Override
@@ -38,6 +44,9 @@ public class WishlistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wishlist);
         mAuth = FirebaseAuth.getInstance();
 
+        //initializin framelayouts
+        frameLayoutContent = findViewById(R.id.framelayout_content_wishlist);
+        frameLayoutNoContent = findViewById(R.id.frmamelayout_nocontent_wishlist);
         //Setting recycler view-----------------------------------------------------------
         recyclerView = findViewById(R.id.recyclerview_wishlist);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -62,24 +71,36 @@ public class WishlistActivity extends AppCompatActivity {
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
                 holder.setImage(model.getImage_url(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
-
                 holder.setItemId(model.getItemId());
                 holder.setPrice(model.getPrice());
-
-                //----------Recycler Click Event------------
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //On Click Events Goes here
-                        Toast.makeText(WishlistActivity.this, "Item is clicked", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
-
 
         };
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+        //counting total no of items and updating no content page accordingly
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long i = dataSnapshot.getChildrenCount();
+                if (i == 0) {//hiding views when there is no item in cart.
+                    frameLayoutNoContent.setVisibility(View.VISIBLE);
+                    frameLayoutContent.setVisibility(View.GONE);
+
+                } else {//showing view when there is any item in cart.
+                    frameLayoutNoContent.setVisibility(View.GONE);
+                    frameLayoutContent.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+
     }
 
     @Override

@@ -21,4 +21,7 @@
     <string name="helpline_number">+91–8969218143</string>
     <string name="helpline_office">Shivpuri \nGali No. 2 \nModinagar \nGhaziabad - 201204.</string>
     <string name="chat_support">Chat now with support executive.</string>
+    <string name="forget_password_desc">To reset password, enter your email, press the button and check your registered email to follow instructions.</string>
+
+
 </resources>

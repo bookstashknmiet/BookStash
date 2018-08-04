@@ -61,7 +61,7 @@
                         android:layout_gravity="center_vertical"
                         android:padding="8dp"
                         android:text="@string/helpline_number"
-                        android:textColor="?android:attr/colorPrimary"
+                        android:textColor="#555"
                         android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:padding="8dp"
                         android:text="@string/helpline_office"
-                        android:textColor="?android:attr/colorPrimary"
+                        android:textColor="#555"
                         android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -144,7 +144,7 @@
                         android:layout_height="wrap_content"
                         android:padding="8dp"
                         android:text="@string/chat_support"
-                        android:textColor="?android:attr/colorPrimary"
+                        android:textColor="#555"
                         android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>

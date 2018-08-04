@@ -17,13 +17,14 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     TextView text_price;
     TextView text_quantity;
     ImageView image;
+    String itemId;
 
     public ProductViewHolder(View itemView) {
         super(itemView);
         text_name = (TextView) itemView.findViewById(R.id.product_name);
         text_description = (TextView) itemView.findViewById(R.id.product_description);
         text_price = (TextView) itemView.findViewById(R.id.product_price);
-        text_quantity=(TextView) itemView.findViewById(R.id.product_quantity);
+        text_quantity = (TextView) itemView.findViewById(R.id.product_quantity);
         image = (ImageView) itemView.findViewById(R.id.product_image);
     }
 
@@ -47,7 +48,11 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void setText_quantity(String quantity){
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setText_quantity(String quantity) {
         text_quantity.setText(quantity);
     }
 

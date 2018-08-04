@@ -1,9 +1,9 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,36 +16,32 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
-    // [START declare_auth]
-    private FirebaseAuth mAuth;
     // [END declare_auth]
     EditText emailField;
     EditText passField;
-
+    // [START declare_auth]
+    private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        mAuth=FirebaseAuth.getInstance();
-        progressBar=findViewById(R.id.progress_bar);
-        emailField=findViewById(R.id.user_email);
-        passField=findViewById(R.id.user_password);
+        mAuth = FirebaseAuth.getInstance();
+        progressBar = findViewById(R.id.progress_bar);
+        emailField = findViewById(R.id.user_email);
+        passField = findViewById(R.id.user_password);
 
 
         findViewById(R.id.sign_up_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //onclick listener for signup button
-                createAccount(emailField.getText().toString(),passField.getText().toString());
+                createAccount(emailField.getText().toString(), passField.getText().toString());
             }
         });
 
@@ -63,6 +59,7 @@ public class SignupActivity extends AppCompatActivity {
         findViewById(R.id.sign_up_btn).setVisibility(View.VISIBLE);
 
     }
+
     private boolean validateForm() {
         //This function validates the form credentials
         if (TextUtils.isEmpty(emailField.getText().toString())) {
@@ -116,7 +113,7 @@ public class SignupActivity extends AppCompatActivity {
         //updates the changes occuring due to active user authentication
         hideProgressDialog();
         if (user != null) {
-            Toast.makeText(this, "Signed in as :"+user.getEmail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Signed in as :" + user.getEmail(), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
             this.finish();
         } else {

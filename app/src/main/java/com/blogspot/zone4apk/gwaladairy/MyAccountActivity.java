@@ -1,10 +1,9 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -78,10 +77,16 @@ public class MyAccountActivity extends AppCompatActivity {
                         FirebaseUser currentUser = mAuth.getCurrentUser();
                         updateUi(currentUser);
                         Toast.makeText(getApplicationContext(), "Signed out successfully.", Toast.LENGTH_SHORT).show();
-                        finish();
+                        finishAffinity();
                         startActivity(new Intent(getApplicationContext(), WelcomeFlashActivity.class));
                     }
                 })
                 .show();
+    }
+
+    public void mViewAllAddress(View view) {
+        Intent intent = new Intent(getApplicationContext(), MyAddressActivity.class);
+        intent.putExtra("addressSelectRequired", false);
+        startActivity(intent);
     }
 }

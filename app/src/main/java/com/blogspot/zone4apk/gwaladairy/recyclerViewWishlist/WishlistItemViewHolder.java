@@ -21,12 +21,9 @@ import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropSquareTransformation;
 
-/**
- * Created by AMIT on 7/10/2018.
- */
-
 public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
 
+    //Views
     TextView text_name;
     TextView text_description;
     TextView text_price;
@@ -47,8 +44,6 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
 
     public WishlistItemViewHolder(final View itemView) {
         super(itemView);
-
-
         mAuth = FirebaseAuth.getInstance();
 
         text_name = (TextView) itemView.findViewById(R.id.product_name_wishlist);
@@ -61,12 +56,12 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
         moveingBtnToCrat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid().toString());
+                //removing data from wishlist db
+                DatabaseReference mWishListDataBase = FirebaseDatabase.getInstance().getReference().child("WishlistDatabase").child(mAuth.getCurrentUser().getUid());
                 mWishListDataBase.child(itemId).removeValue();
 
-                DatabaseReference mCartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid().toString()).push();
-                String pushId = mCartDatabase.getKey();
+                //adding data to cart db
+                DatabaseReference mCartDatabase = FirebaseDatabase.getInstance().getReference().child("CartDatabase").child(mAuth.getCurrentUser().getUid()).child(itemId);
 
                 Map addToCartProductDetails = new HashMap();
                 addToCartProductDetails.put("name", text_name.getText());
@@ -74,18 +69,18 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
                 addToCartProductDetails.put("quantity", text_quantity.getText());
                 addToCartProductDetails.put("price", itemPrice);
                 addToCartProductDetails.put("image_url", imageUrl);
-                addToCartProductDetails.put("itemId", pushId);
+                addToCartProductDetails.put("itemId", itemId);
+                addToCartProductDetails.put("product_count", 1);
 
                 mCartDatabase.updateChildren(addToCartProductDetails, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-
                         if (databaseError == null) {
+                            //If database transaction was successful
                             Log.i("Status", "Item is add to Cart");
                         }
                     }
                 });
-
             }
         });
 
@@ -120,16 +115,14 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setImage(String imageUrl, Context ctx) {
+        this.imageUrl = imageUrl;
         Picasso.with(ctx)
                 .load(imageUrl)
                 .transform(new CropSquareTransformation())
                 .into(image);
-
-        this.imageUrl = imageUrl;
     }
 
     public void setText_quantity(String quantity) {
         text_quantity.setText(quantity);
     }
-
 }

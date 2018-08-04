@@ -17,8 +17,8 @@
         android:layout_below="@id/err_img"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:textColor="@android:color/black"
         android:text="Under construction"
+        android:textColor="@android:color/black"
         android:textSize="22sp"
         android:textStyle="bold" />
 

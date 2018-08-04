@@ -1,6 +1,22 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard;
 
 public class ProductItem {
+    private String name;
+    private Long price;
+    private String description;
+    private String imageurl;
+    private String quantity;
+    private String itemId;
+
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
     public ProductItem() {
     }
 
@@ -43,12 +59,6 @@ public class ProductItem {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
-
-    private String name;
-    private Long price;
-    private String description;
-    private String imageurl;
-    private String quantity;
     //name is our key to fetch data
 
 }

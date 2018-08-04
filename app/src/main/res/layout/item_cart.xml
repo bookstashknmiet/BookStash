@@ -73,8 +73,7 @@
                     android:text="product quantity"
                     android:textAllCaps="true"
                     android:textColor="#000"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -84,30 +83,74 @@
                     android:textColor="#000"
                     android:textSize="10sp" />
 
+
+                <TextView
+                    android:id="@+id/product_price_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="\u20B9"
+                    android:textColor="#00f"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:orientation="horizontal"
-                    android:padding="8dp"
-                    android:weightSum="3">
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:spinnerMode="dialog"></Spinner>
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
 
                     <TextView
-                        android:id="@+id/product_price_cart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical|end"
-                        android:text="\u20B945"
-                        android:textColor="#0000ff"
-                        android:textSize="18sp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:gravity="start|center_vertical"
+                        android:text="Quantity:"
+                        android:textColor="#000"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:paddingEnd="4dp"
+                        android:paddingStart="4dp">
+
+                        <ImageView
+                            android:id="@+id/btnDecQty"
+                            android:layout_width="40dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_margin="4dp"
+                            android:background="#eee"
+                            android:src="@drawable/ic_sub_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/tvQty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|center_horizontal"
+                            android:text="1"
+                            android:textColor="#000"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/btnIncQty"
+                            android:layout_width="40dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical|end"
+                            android:layout_margin="4dp"
+                            android:background="#eee"
+                            android:src="@drawable/ic_add_black_24dp" />
+                    </FrameLayout>
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 
@@ -130,7 +173,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0.5dp"
-                android:textStyle="bold"
                 android:layout_weight="1"
                 android:background="#fff"
                 android:gravity="center"
@@ -138,7 +180,8 @@
                 android:text="Remove"
                 android:textAllCaps="true"
                 android:textColor="#000"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/button_move_to_wishlist"
@@ -148,12 +191,12 @@
                 android:layout_weight="1"
                 android:background="#fff"
                 android:gravity="center"
-                android:textStyle="bold"
                 android:padding="8dp"
                 android:text="Move to wishlist"
                 android:textAllCaps="true"
-                android:textColor="?android:attr/colorAccent"
-                android:textSize="12sp" />
+                android:textColor="?android:attr/colorPrimaryDark"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>
