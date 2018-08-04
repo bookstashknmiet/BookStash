@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00675b</color>
-    <color name="colorAccent">#4DB6AC</color>
+    <!--<color name="colorPrimary">#009688</color>-->
+    <!--<color name="colorPrimaryDark">#00675b</color>-->
+    <!--<color name="colorAccent">#4DB6AC</color>-->
 
+    <color name="colorPrimary">#ff7b00</color>
+    <color name="colorPrimaryDark">#e65200</color>
+    <color name="colorAccent">#FF6E40</color>
 
-    <color name="colorAdminCard">#4DB6AC</color>
+    <!--Chat support activity content-->
+    <color name="colorAdminCard">#FF6E40</color>
     <color name="colorUserCard">#fff</color>
     <color name="colorAdminText">#fff</color>
     <color name="colorUserText">#555</color>

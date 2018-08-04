@@ -16,7 +16,7 @@
             android:id="@+id/topPanel"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:orientation="vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"

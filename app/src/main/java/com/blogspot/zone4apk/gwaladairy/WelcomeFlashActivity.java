@@ -30,7 +30,10 @@ public class WelcomeFlashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     if (currentUser != null)
-                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        if (mAuth.getCurrentUser().isEmailVerified())
+                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        else
+                            startActivity(new Intent(getApplicationContext(), VerifyAccountActivity.class));
                     else
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();
