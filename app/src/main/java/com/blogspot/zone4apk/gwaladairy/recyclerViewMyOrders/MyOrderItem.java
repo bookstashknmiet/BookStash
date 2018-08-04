@@ -9,6 +9,26 @@ import java.io.Serializable;
 public class MyOrderItem {
 
  String orderNo;
+ String Address;
+
+ public String getOrderstatus() {
+  return orderstatus;
+ }
+
+ public void setOrderstatus(String orderstatus) {
+  this.orderstatus = orderstatus;
+ }
+
+ String orderstatus;
+
+ public String getAddress() {
+  return Address;
+ }
+
+ public void setAddress(String address) {
+  Address = address;
+ }
+
  String time;
 
  public String getOrderNo() {

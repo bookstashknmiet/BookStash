@@ -3,23 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee"
+    android:background="#fff"
     tools:context=".MyOrdersActivity">
 
     <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recyclerview_myOrders"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:nestedScrollingEnabled="true"-->
-        <!--android:scrollbars="none" />-->
-<ListView
+    <!--android:id="@+id/recyclerview_myOrders"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:nestedScrollingEnabled="true"-->
+    <!--android:scrollbars="none" />-->
 
-    android:id="@+id/listViewTest"
-    android:layout_width="match_parent"
-   android:divider="@null"
-    android:dividerHeight="0dp"
-    android:layout_height="match_parent">
-
-</ListView>
+        <ListView
+            android:id="@+id/listViewTest"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            ></ListView>
 
 </android.support.constraint.ConstraintLayout>

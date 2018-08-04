@@ -118,6 +118,17 @@ public class MyOrdersActivity extends AppCompatActivity {
                 Log.i("Title",""+dataSnapshot.getKey().toString());
                 int productCount = (int) dataSnapshot.child("productsOrdered").getChildrenCount();
 
+                //For taking Addresss------------------
+                DataSnapshot deliveryAdd= dataSnapshot.child("deliveryAddress");
+                String address =""+ deliveryAdd.child("addressLine1").getValue()+", "+deliveryAdd.child("addressLine2").getValue()+"\n" +
+                        deliveryAdd.child("city").getValue()+", "+
+                        deliveryAdd.child("state").getValue()+"-"+deliveryAdd.child("pincode").getValue()+"\n\n"+
+                        ""+deliveryAdd.child("mobile").getValue()+"\n";
+
+                //For taking Status-----------------------
+                String orderStatus = "Status : "+dataSnapshot.child("paymentDetail").child("status").getValue();
+
+
                 String dateStr = dataSnapshot.getKey().toString();
                 Date date = null;
                 try {
@@ -127,8 +138,10 @@ public class MyOrdersActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                details.setOrderNo(dataSnapshot.getKey().toString());
 
+                details.setOrderstatus(orderStatus);
+                details.setAddress(address);
+                details.setOrderNo(dataSnapshot.getKey().toString());
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy hh:mm a");
                 String timeStamp = simpleDateFormat.format(date);
 
@@ -141,10 +154,13 @@ public class MyOrdersActivity extends AppCompatActivity {
 
                 myOrderItemViewHolder.notifyDataSetChanged();
 
+
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+
 
             }
 
@@ -163,6 +179,7 @@ public class MyOrdersActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
 }
