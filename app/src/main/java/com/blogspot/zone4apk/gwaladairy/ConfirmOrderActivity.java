@@ -122,7 +122,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         payment.put("totalPrice", bundle.getLong("totalpriceorder"));
         payment.put("deliveryCharges", bundle.getLong("deliverychargeorder"));
         payment.put("amountPaid", bundle.getLong("deliverychargeorder") + bundle.getLong("totalpriceorder"));
-        payment.put("status","Order Placed");
+        payment.put("status", "Order Placed");
         orderPaymentDetail.updateChildren(payment);
 
         //Setting Products Ordered---------------------------------------------------

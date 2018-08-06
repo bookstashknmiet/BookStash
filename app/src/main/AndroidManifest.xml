@@ -13,6 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".WelcomeFlashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,12 +23,14 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MyAccountActivity"
             android:label="My Account"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".DashboardActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />
@@ -35,11 +38,13 @@
         <activity
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HelpActivity"
             android:label="Help"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".DashboardActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />
@@ -47,7 +52,8 @@
         <activity
             android:name=".AboutActivity"
             android:label="About"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".DashboardActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />
@@ -55,7 +61,8 @@
         <activity
             android:name=".MyOrdersActivity"
             android:label="My Orders"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".DashboardActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />
@@ -63,7 +70,8 @@
         <activity
             android:name=".WishlistActivity"
             android:label="Wishlist"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".DashboardActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />
@@ -71,45 +79,54 @@
         <activity
             android:name=".CartActivity"
             android:label="Cart"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".DashboardActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />
         </activity>
         <activity
             android:name=".SignupActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ProfileActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ChatSupportActivity"
-            android:label="Chat Support">
+            android:label="Chat Support"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HelpActivity" />
         </activity>
         <activity
             android:name=".MyAddressActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EditAddressActivity"
-            android:label="Add a new address" />
+            android:label="Add a new address"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ConfirmOrderActivity"
-            android:label="Confirm Order">
+            android:label="Confirm Order"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CartActivity" />
         </activity>
         <activity
             android:name=".VerifyAccountActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ForgotPasswordActivity"
-            android:label="Reset Password">
+            android:label="Reset Password"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoginActivity" />

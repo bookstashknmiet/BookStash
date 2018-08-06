@@ -1,29 +1,16 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrderProducts;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blogspot.zone4apk.gwaladairy.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import jp.wasabeef.picasso.transformations.CropSquareTransformation;
-
-/**
- * Created by AMIT on 8/1/2018.
- */
 
 public class MyOrderProductViewHolder extends RecyclerView.ViewHolder {
 
@@ -40,11 +27,8 @@ public class MyOrderProductViewHolder extends RecyclerView.ViewHolder {
     //Imageview
     ImageView image;
 
-
     //Qty objects
     TextView tvQuantity;
-
-
 
     //DataBase setup
     FirebaseAuth mAuth;
@@ -65,9 +49,6 @@ public class MyOrderProductViewHolder extends RecyclerView.ViewHolder {
         tvQuantity = (TextView) itemView.findViewById(R.id.tvQty);
 
     }
-
-
-
 
     public void setText_name(String name) {
         text_name.setText(name);

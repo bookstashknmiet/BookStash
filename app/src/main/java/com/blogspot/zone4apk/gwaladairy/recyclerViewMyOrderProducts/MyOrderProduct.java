@@ -1,11 +1,5 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrderProducts;
 
-import java.io.Serializable;
-
-/**
- * Created by AMIT on 8/1/2018.
- */
-
 public class MyOrderProduct {
     //database fields
     public String name;

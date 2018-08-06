@@ -1,21 +1,22 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrders;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.R;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItem;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItemViewHolder;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrderProducts.MyOrderProduct;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrderProducts.MyOrderProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -30,13 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
-/**
- * Created by AMIT on 7/27/2018.
- */
-
-public class MyOrderItemViewHolder  extends ArrayAdapter {
+public class MyOrderItemViewHolder extends ArrayAdapter {
     private List<MyOrderItem> myOrderDetailsList;
     private int resource;
     private Context context;
@@ -50,53 +45,77 @@ public class MyOrderItemViewHolder  extends ArrayAdapter {
     DatabaseReference orderStatusDataBase;
 
     //adapter----------------------
-     FirebaseRecyclerAdapter adapter;
+    FirebaseRecyclerAdapter adapter;
+    RecyclerView recyclerView;
 
     public MyOrderItemViewHolder(@NonNull Context context, @LayoutRes int resource, @NonNull List<MyOrderItem> myOrderDetails) {
         super(context, resource, myOrderDetails);
-
-
-
         this.context = context;
         this.resource = resource;
         this.myOrderDetailsList = myOrderDetails;
     }
 
+
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-
+    public View getView(final int position, @Nullable final View convertView, @NonNull ViewGroup parent) {
         final MyOrderItem details = myOrderDetailsList.get(position);
-
         View view = LayoutInflater.from(context).inflate(resource, parent, false);
 
         TextView orderid = view.findViewById(R.id.textView_orderId);
         TextView orderTime = view.findViewById(R.id.textview_date_of_order);
         final TextView orderAddress = view.findViewById(R.id.text_Address);
         final TextView orderStatus = view.findViewById(R.id.orderStatus);
-        final TextView cancleBtn =view.findViewById(R.id.cancel_btn);
+        final TextView cancleBtn = view.findViewById(R.id.cancel_btn);
 
-        orderStatusDataBase = FirebaseDatabase.getInstance().getReference().child("OrderDatabase").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(details.getOrderNo()).child("paymentDetail").child("status");
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("id", details.getOrderNo());
+                Toast.makeText(context, "You clicked item no" + getPosition(details), Toast.LENGTH_SHORT).show();
+            }
+        });
+        cancleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                orderStatusDataBase.setValue("Order Cancelled");
+            }
+        });
+
+        //Setting up order status
+        orderStatusDataBase = FirebaseDatabase.getInstance().getReference()
+                .child("OrderDatabase")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(details.getOrderNo())
+                .child("paymentDetail")
+                .child("status");
+
         orderStatusDataBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
                 String status = dataSnapshot.getValue().toString();
-                orderStatus.setText(status);
-
-                if(status.equals("Order Placed")){
-                    cancleBtn.setText("CANCEL");
-                    cancleBtn.setEnabled(true);
-                }else if(status.equals("Order Cancelled")){
-                    cancleBtn.setText("Cancelled");
-                    cancleBtn.setEnabled(false);
-                }else if(status.equals("Order Delivered")){
-                    cancleBtn.setText("Delivered");
-                    cancleBtn.setEnabled(false);
+                switch (status) {
+                    case "Order Placed":
+                        orderStatus.setText(status);
+                        orderStatus.setTextColor(Color.BLUE);
+                        cancleBtn.setText("CANCEL ORDER");
+                        cancleBtn.setEnabled(true);
+                        break;
+                    case "Order Cancelled":
+                        orderStatus.setText(status);
+                        orderStatus.setTextColor(Color.RED);
+                        cancleBtn.setText("ORDER CANCELLED");
+                        cancleBtn.setEnabled(false);
+                        break;
+                    case "Order Delivered":
+                        orderStatus.setText(status);
+                        orderStatus.setTextColor(Color.MAGENTA);
+                        cancleBtn.setText("ORDER DELIVERED");
+                        cancleBtn.setEnabled(false);
+                        break;
                 }
-
+                Log.i("Pos", String.valueOf(getPosition(details)));
             }
 
             @Override
@@ -105,31 +124,9 @@ public class MyOrderItemViewHolder  extends ArrayAdapter {
             }
         });
 
-        cancleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                orderStatusDataBase.setValue("Order Cancelled");
-
-            }
-        });
-
-//        if(details.getOrderstatus().equals("Status : OrderCancelled")){
-//            cancleBtn.setEnabled(false);
-//            cancleBtn.setText("OrderCancelled");
-//        }else if(details.getOrderstatus().equals("Status : Delivered")){
-//            cancleBtn.setEnabled(false);
-//            cancleBtn.setText("Delivered");
-//        }
-//            else
-//        {
-//            orderStatus.setText(details.getOrderstatus());
-//        }
-//        orderStatus.setText(details.getOrderstatus());
         orderid.setText("Order No. " + details.getOrderNo());
         orderTime.setText(details.getTime());
         orderAddress.setText(details.getAddress());
-
-        RecyclerView recyclerView;
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -138,12 +135,14 @@ public class MyOrderItemViewHolder  extends ArrayAdapter {
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("OrderDatabase")
-                .child(mAuth.getCurrentUser().getUid()).child(details.getOrderNo()).child("productsOrdered");
+                .child(mAuth.getCurrentUser().getUid())
+                .child(details.getOrderNo())
+                .child("productsOrdered");
         databaseReference.keepSynced(true);
         Query query = databaseReference.limitToLast(50);
-        FirebaseRecyclerOptions<MyOrderProduct> options = new FirebaseRecyclerOptions.Builder<MyOrderProduct>().setQuery(query, MyOrderProduct.class).build();
+        FirebaseRecyclerOptions<MyOrderProduct> options =
+                new FirebaseRecyclerOptions.Builder<MyOrderProduct>().setQuery(query, MyOrderProduct.class).build();
 
-        try{
         adapter = new FirebaseRecyclerAdapter<MyOrderProduct, MyOrderProductViewHolder>(options) {
             @NonNull
             @Override
@@ -154,7 +153,6 @@ public class MyOrderItemViewHolder  extends ArrayAdapter {
 
             @Override
             protected void onBindViewHolder(@NonNull final MyOrderProductViewHolder holder, int position, @NonNull final MyOrderProduct model) {
-
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
@@ -165,17 +163,15 @@ public class MyOrderItemViewHolder  extends ArrayAdapter {
                 holder.setProductCount(model.getProduct_count());
             }
         };
-
         adapter.startListening();
-
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-    }
-        finally{
-
-        }
-
-
+        recyclerView.setRecyclerListener(new RecyclerView.RecyclerListener() {
+            @Override
+            public void onViewRecycled(RecyclerView.ViewHolder holder) {
+                adapter.stopListening();
+            }
+        });
         return view;
     }
 
@@ -183,7 +179,6 @@ public class MyOrderItemViewHolder  extends ArrayAdapter {
     @Nullable
     @Override
     public Object getItem(int position) {
-       // adapter.stopListening();
         return myOrderDetailsList.get(position);
     }
 
