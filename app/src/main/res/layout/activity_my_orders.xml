@@ -6,12 +6,24 @@
     android:background="#eee"
     tools:context=".MyOrdersActivity">
 
-    <ListView
-        android:id="@+id/listViewTest"
+    <FrameLayout
+        android:id="@+id/frmamelayout_nocontent_order"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:scrollbars="none"
-        android:dividerHeight="0dp" />
+        android:layout_height="match_parent">
+
+        <include layout="@layout/no_content_page" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/framelayout_content_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_Order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
 
 </android.support.constraint.ConstraintLayout>
