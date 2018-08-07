@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ViewSwitcher;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrderProducts.MyOrderProduct;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewMyOrderProducts.MyOrderProductViewHolder;
@@ -35,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class MyOrdersActivity extends AppCompatActivity {
@@ -67,7 +66,8 @@ public class MyOrdersActivity extends AppCompatActivity {
         //Database stuff
         databaseReference = FirebaseDatabase.getInstance().getReference().child("OrderDatabase")
                 .child(mAuth.getCurrentUser().getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.orderByKey().limitToLast(25);       //Sorting orders and limiting to last 25
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //----------------We need to show no content page if there is no order
@@ -137,6 +137,7 @@ public class MyOrdersActivity extends AppCompatActivity {
                     details.setItemsCount(itemsCount);
                     myOrderItems.add(details);
                 }
+                Collections.reverse(myOrderItems);      //reversing list so that last order appear at top
                 adapter.notifyDataSetChanged();
             }
 
@@ -188,21 +189,24 @@ public class MyOrdersActivity extends AppCompatActivity {
             //------------
             switch (myOrderItem.getOrderstatus()) {
                 case "Status : Order Placed":
-                    holder.orderStatus.setTextColor(Color.BLUE);
+                    holder.orderStatus.setTextColor(Color.YELLOW);
                     holder.cancleBtn.setText("CANCEL ORDER");
                     holder.cancleBtn.setEnabled(true);
+                    holder.cancleBtn.setVisibility(View.VISIBLE);
 
                     break;
                 case "Status : Order Cancelled":
                     holder.orderStatus.setTextColor(Color.RED);
                     holder.cancleBtn.setText("ORDER CANCELLED");
                     holder.cancleBtn.setEnabled(false);
+                    holder.cancleBtn.setVisibility(View.INVISIBLE);
 
                     break;
                 case "Status : Order Delivered":
-                    holder.orderStatus.setTextColor(Color.MAGENTA);
+                    holder.orderStatus.setTextColor(Color.CYAN);
                     holder.cancleBtn.setText("ORDER DELIVERED");
                     holder.cancleBtn.setEnabled(false);
+                    holder.cancleBtn.setVisibility(View.INVISIBLE);
 
                     break;
             }
@@ -240,14 +244,6 @@ public class MyOrdersActivity extends AppCompatActivity {
             });
 
             //Setting expand collapse
-            holder.imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-                @Override
-                public View makeView() {
-                    ImageView imageView = new ImageView(getApplicationContext());
-                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    return imageView;
-                }
-            });
             holder.imageSwitcher.setContentDescription("collapsed");
             if (holder.imageSwitcher.getContentDescription().toString().equals("expanded")) {
                 holder.imageSwitcher.setImageResource(R.drawable.ic_expand_less_black_24dp);

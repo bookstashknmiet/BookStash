@@ -1,6 +1,7 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ public class DashboardActivity extends AppCompatActivity
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
+    ProgressDialog progressDialog;
 
     String quantity = "";
 
@@ -70,6 +72,10 @@ public class DashboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading Products...");
+        progressDialog.show();
 
         //Setting recycler view-----------------------------------------------------------
         recyclerView = findViewById(R.id.recyclerview_dashboard);
@@ -81,6 +87,15 @@ public class DashboardActivity extends AppCompatActivity
         FirebaseRecyclerOptions<ProductItem> options = new FirebaseRecyclerOptions.Builder<ProductItem>().setQuery(query, ProductItem.class).build();
 
         adapter = new FirebaseRecyclerAdapter<ProductItem, ProductViewHolder>(options) {
+
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+
             @NonNull
             @Override
             public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageSwitcher;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.blogspot.zone4apk.gwaladairy.R;
 
@@ -28,7 +30,7 @@ public class MyOrderItemViewHolder extends RecyclerView.ViewHolder {
     public ImageSwitcher imageSwitcher;
     public LinearLayout moreLayout;
 
-    public MyOrderItemViewHolder(View itemView, ArrayList<MyOrderItem> myOrderItems, Context context) {
+    public MyOrderItemViewHolder(View itemView, ArrayList<MyOrderItem> myOrderItems, final Context context) {
         super(itemView);
         this.myOrderItems = myOrderItems;
         this.context = context;
@@ -45,5 +47,13 @@ public class MyOrderItemViewHolder extends RecyclerView.ViewHolder {
         recyclerViewOrderItem = itemView.findViewById(R.id.recyclerView_myOrder_items);
         imageSwitcher = itemView.findViewById(R.id.expand_collapse_detail_order);
         moreLayout = itemView.findViewById(R.id.more_content_order);
+        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                ImageView imageView = new ImageView(context);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                return imageView;
+            }
+        });
     }
 }
