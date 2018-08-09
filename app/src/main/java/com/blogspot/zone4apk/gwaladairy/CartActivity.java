@@ -50,6 +50,12 @@ public class CartActivity extends AppCompatActivity {
     FrameLayout frameLayoutContent;
     FrameLayout frameLayoutNoContent;
 
+
+    //Main Product DataBase-------------------
+    DatabaseReference mainProductDataBase;
+    String price;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,9 +97,30 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull final CartItemViewHolder holder, int position, @NonNull final CartItem model) {
 
+                //Contectivity to main productdatabase-------------------
+
+                mainProductDataBase =FirebaseDatabase.getInstance().getReference().child("ProductDetailsDatabase").child(model.getItemId());
+                mainProductDataBase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        price =String.valueOf( dataSnapshot.child("price").getValue());
+
+                        databaseReference.child(model.getItemId()).child("price").setValue(Long.valueOf(price));
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
+               // holder.setText_price("\u20B9 " + price);
                 holder.setImage(model.getImage_url(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
                 holder.setItemId(model.getItemId());

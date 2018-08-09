@@ -38,11 +38,16 @@ public class WishlistActivity extends AppCompatActivity {
     FrameLayout frameLayoutNoContent;
     FirebaseAuth mAuth;
 
+    //Main Product DataBase-------------------
+    DatabaseReference mainProductDataBase;
+    String price;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
         mAuth = FirebaseAuth.getInstance();
+
 
         //initializin framelayouts
         frameLayoutContent = findViewById(R.id.framelayout_content_wishlist);
@@ -66,6 +71,28 @@ public class WishlistActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull final WishlistItemViewHolder holder, int position, @NonNull final WishlistItem model) {
+
+
+                //Contectivity to main productdatabase-------------------
+
+                mainProductDataBase =FirebaseDatabase.getInstance().getReference().child("ProductDetailsDatabase").child(model.getItemId());
+                mainProductDataBase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        price =String.valueOf(dataSnapshot.child("price").getValue());
+
+                        databaseReference.child(model.getItemId()).child("price").setValue(Long.valueOf(price));
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
