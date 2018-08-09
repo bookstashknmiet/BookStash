@@ -1,6 +1,7 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ConfirmOrderActivity extends AppCompatActivity {
+public class ConfirmOrderActivity extends AppCompatActivity implements ConnectivityReciever.ConnectivityRecieverListener {
 
     TextView name;
     TextView address1;
@@ -46,6 +47,13 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_order);
         mAuth = FirebaseAuth.getInstance();
+
+        //Reciever content
+        filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        reciever = new ConnectivityReciever();
+
         Intent orderIntent = getIntent();
         address = (Address) Objects.requireNonNull(orderIntent.getExtras()).getSerializable("addressdataorder");
         bundle = orderIntent.getExtras();
@@ -150,4 +158,30 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         finish();
         Toast.makeText(this, "Order placed successfully", Toast.LENGTH_SHORT).show();
     }
+
+    //------------------------------Managing internet connection status
+    //BroadcastReciever
+    private ConnectivityReciever reciever;
+    IntentFilter filter;
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        ConnectivityReciever connectivityReciever = new ConnectivityReciever();
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.confirmorder_activity), false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(reciever);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //register connection status listener
+        MyApplication.getInstance().setConnectivityListener(this);
+        registerReceiver(reciever, filter);
+    }
+
 }

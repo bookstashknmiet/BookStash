@@ -1,6 +1,7 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements ConnectivityReciever.ConnectivityRecieverListener {
 
     //Using RecylerView to show the shopping items
     RecyclerView recyclerView;
@@ -50,11 +51,20 @@ public class CartActivity extends AppCompatActivity {
     FrameLayout frameLayoutContent;
     FrameLayout frameLayoutNoContent;
 
+    //updated price from ProductDetails
+    String price;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
         mAuth = FirebaseAuth.getInstance();
+
+        //Reciever content
+        filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        reciever = new ConnectivityReciever();
 
         //Price TextViews initialization
         finalPrice = findViewById(R.id.txt_finalPrice);
@@ -91,6 +101,27 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull final CartItemViewHolder holder, int position, @NonNull final CartItem model) {
 
+                //Connectivity to main product database-----------
+                FirebaseDatabase.getInstance().getReference()
+                        .child("ProductDetailsDatabase")
+                        .child(model.getItemId())
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                price = String.valueOf(dataSnapshot.child("price").getValue());
+                                databaseReference
+                                        .child(model.getItemId())
+                                        .child("price")
+                                        .setValue(Long.valueOf(price));
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(CartActivity.this,
+                                        "Something went wrong!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
@@ -209,4 +240,30 @@ public class CartActivity extends AppCompatActivity {
         });
 
     }
+
+    //------------------------------Managing internet connection status
+    //BroadcastReciever
+    private ConnectivityReciever reciever;
+    IntentFilter filter;
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        ConnectivityReciever connectivityReciever = new ConnectivityReciever();
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.cart_activity), false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(reciever);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //register connection status listener
+        MyApplication.getInstance().setConnectivityListener(this);
+        registerReceiver(reciever, filter);
+    }
+
 }

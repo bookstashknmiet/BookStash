@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,7 +49,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import static java.lang.Thread.sleep;
 
 public class DashboardActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ConnectivityReciever.ConnectivityRecieverListener {
 
     boolean doubleBackToExitPressedOnce = false;
     View hView;
@@ -72,6 +73,12 @@ public class DashboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Reciever content
+        filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        reciever = new ConnectivityReciever();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading Products...");
@@ -375,4 +382,29 @@ public class DashboardActivity extends AppCompatActivity
         }
     }
 
+
+    //------------------------------Managing internet connection status
+    //BroadcastReciever
+    private ConnectivityReciever reciever;
+    IntentFilter filter;
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        ConnectivityReciever connectivityReciever = new ConnectivityReciever();
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.dashboard_activity), true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(reciever);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //register connection status listener
+        MyApplication.getInstance().setConnectivityListener(this);
+        registerReceiver(reciever, filter);
+    }
 }
