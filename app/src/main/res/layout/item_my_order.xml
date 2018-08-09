@@ -114,7 +114,7 @@
                 android:background="#eee"
                 android:padding="8dp"
                 android:text="Cancel Order"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:textSize="12sp" />
 
         </LinearLayout>

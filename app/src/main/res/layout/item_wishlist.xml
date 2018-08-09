@@ -76,7 +76,7 @@
                         android:layout_weight="2"
                         android:gravity="center_vertical|end"
                         android:text="\u20B945"
-                        android:textColor="#0000ff"
+                        android:textColor="@color/colorAccent"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>

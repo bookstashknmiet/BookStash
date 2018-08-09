@@ -3,6 +3,7 @@ package com.blogspot.zone4apk.gwaladairy;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-public class MyOrdersActivity extends AppCompatActivity {
+public class MyOrdersActivity extends AppCompatActivity implements ConnectivityReciever.ConnectivityRecieverListener {
 
 
     DatabaseReference databaseReference;
@@ -55,6 +56,12 @@ public class MyOrdersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_orders);
         mAuth = FirebaseAuth.getInstance();
+
+        //Reciever content
+        filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        reciever = new ConnectivityReciever();
 
         myOrderItems = new ArrayList<>();
         frameLayoutContent = findViewById(R.id.framelayout_content_order);
@@ -189,21 +196,22 @@ public class MyOrdersActivity extends AppCompatActivity {
             //------------
             switch (myOrderItem.getOrderstatus()) {
                 case "Status : Order Placed":
-                    holder.orderStatus.setTextColor(Color.YELLOW);
+                    holder.orderStatus.setTextColor(Color.parseColor("#4CAF50"));
                     holder.cancleBtn.setText("CANCEL ORDER");
                     holder.cancleBtn.setEnabled(true);
+                    holder.cancleBtn.setTextColor(Color.parseColor("#F44336"));
                     holder.cancleBtn.setVisibility(View.VISIBLE);
 
                     break;
                 case "Status : Order Cancelled":
-                    holder.orderStatus.setTextColor(Color.RED);
+                    holder.orderStatus.setTextColor(Color.parseColor("#F44336"));
                     holder.cancleBtn.setText("ORDER CANCELLED");
                     holder.cancleBtn.setEnabled(false);
                     holder.cancleBtn.setVisibility(View.INVISIBLE);
 
                     break;
                 case "Status : Order Delivered":
-                    holder.orderStatus.setTextColor(Color.CYAN);
+                    holder.orderStatus.setTextColor(Color.parseColor("#2196F3"));
                     holder.cancleBtn.setText("ORDER DELIVERED");
                     holder.cancleBtn.setEnabled(false);
                     holder.cancleBtn.setVisibility(View.INVISIBLE);
@@ -317,4 +325,30 @@ public class MyOrdersActivity extends AppCompatActivity {
             return myOrderItems.size();
         }
     }
+
+    //------------------------------Managing internet connection status
+    //BroadcastReciever
+    private ConnectivityReciever reciever;
+    IntentFilter filter;
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        ConnectivityReciever connectivityReciever = new ConnectivityReciever();
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.myorders_activity), false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(reciever);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //register connection status listener
+        MyApplication.getInstance().setConnectivityListener(this);
+        registerReceiver(reciever, filter);
+    }
+
 }

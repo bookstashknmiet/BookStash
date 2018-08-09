@@ -1,5 +1,6 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewWishlist.WishlistItemViewHolder;
@@ -24,7 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class WishlistActivity extends AppCompatActivity {
+public class WishlistActivity extends AppCompatActivity implements ConnectivityReciever.ConnectivityRecieverListener {
 
     //Using RecylerView to show the shopping items
     RecyclerView recyclerView;
@@ -39,8 +41,7 @@ public class WishlistActivity extends AppCompatActivity {
     FrameLayout frameLayoutNoContent;
     FirebaseAuth mAuth;
 
-    //Main Product DataBase-------------------
-    DatabaseReference mainProductDataBase;
+    //updated price from ProductDetails
     String price;
 
     @Override
@@ -49,6 +50,11 @@ public class WishlistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wishlist);
         mAuth = FirebaseAuth.getInstance();
 
+        //Reciever content
+        filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        reciever = new ConnectivityReciever();
 
         //initializin framelayouts
         frameLayoutContent = findViewById(R.id.framelayout_content_wishlist);
@@ -73,28 +79,27 @@ public class WishlistActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull final WishlistItemViewHolder holder, int position, @NonNull final WishlistItem model) {
 
+                //Connectivity to main product database-----------
+                FirebaseDatabase.getInstance().getReference()
+                        .child("ProductDetailsDatabase")
+                        .child(model.getItemId())
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                price = String.valueOf(dataSnapshot.child("price").getValue());
+                                databaseReference
+                                        .child(model.getItemId())
+                                        .child("price")
+                                        .setValue(Long.valueOf(price));
+                            }
 
-                //Contectivity to main productdatabase-------------------
-                Log.i("Error Wishlist", model.getItemId());
-                mainProductDataBase =FirebaseDatabase.getInstance().getReference().child("ProductDetailsDatabase").child(model.getItemId());
-                mainProductDataBase.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        price =String.valueOf( dataSnapshot.child("price").getValue());
-
-                        databaseReference.child(model.getItemId()).child("price").setValue(Long.valueOf(price));
-
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(WishlistActivity.this,
+                                        "Something went wrong!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
@@ -143,4 +148,30 @@ public class WishlistActivity extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
+
+    //------------------------------Managing internet connection status
+    //BroadcastReciever
+    private ConnectivityReciever reciever;
+    IntentFilter filter;
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        ConnectivityReciever connectivityReciever = new ConnectivityReciever();
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.wishlist_activity), false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(reciever);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //register connection status listener
+        MyApplication.getInstance().setConnectivityListener(this);
+        registerReceiver(reciever, filter);
+    }
+
 }
