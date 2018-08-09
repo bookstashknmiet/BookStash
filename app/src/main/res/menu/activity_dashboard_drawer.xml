@@ -21,6 +21,11 @@
             android:icon="@drawable/ic_wishlist"
             android:title="Wishlist" />
         <item
+            android:id="@+id/nav_notification"
+            android:name="Wishlist"
+            android:icon="@drawable/ic_notifications"
+            android:title="Notifications" />
+        <item
             android:id="@+id/nav_help"
             android:name="Help"
             android:icon="@drawable/ic_help"

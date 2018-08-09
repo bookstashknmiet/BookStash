@@ -317,6 +317,9 @@ public class DashboardActivity extends AppCompatActivity
             Intent intentCart = new Intent(DashboardActivity.this, CartActivity.class);
             startActivity(intentCart);
             return true;
+        } else if (id == R.id.nav_notification) {
+            startActivity(new Intent(getApplicationContext(), NotificationsActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -336,6 +339,8 @@ public class DashboardActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(), MyOrdersActivity.class));
         } else if (id == R.id.nav_wishlist) {
             startActivity(new Intent(getApplicationContext(), WishlistActivity.class));
+        } else if (id == R.id.nav_notification) {
+            startActivity(new Intent(getApplicationContext(), NotificationsActivity.class));
         } else if (id == R.id.nav_share) {
             mShare();
         } else if (id == R.id.nav_send) {

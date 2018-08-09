@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,11 +99,13 @@ public class CartActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull final CartItemViewHolder holder, int position, @NonNull final CartItem model) {
 
                 //Contectivity to main productdatabase-------------------
+                Log.i("Error CArt", model.getItemId());
 
                 mainProductDataBase =FirebaseDatabase.getInstance().getReference().child("ProductDetailsDatabase").child(model.getItemId());
                 mainProductDataBase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         price =String.valueOf( dataSnapshot.child("price").getValue());
 
                         databaseReference.child(model.getItemId()).child("price").setValue(Long.valueOf(price));
@@ -120,7 +123,6 @@ public class CartActivity extends AppCompatActivity {
                 holder.setText_name(model.getName());
                 holder.setText_description(model.getDescription());
                 holder.setText_price("\u20B9 " + String.valueOf(model.getPrice()));
-               // holder.setText_price("\u20B9 " + price);
                 holder.setImage(model.getImage_url(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
                 holder.setItemId(model.getItemId());

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,12 +75,13 @@ public class WishlistActivity extends AppCompatActivity {
 
 
                 //Contectivity to main productdatabase-------------------
-
+                Log.i("Error Wishlist", model.getItemId());
                 mainProductDataBase =FirebaseDatabase.getInstance().getReference().child("ProductDetailsDatabase").child(model.getItemId());
                 mainProductDataBase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        price =String.valueOf(dataSnapshot.child("price").getValue());
+
+                        price =String.valueOf( dataSnapshot.child("price").getValue());
 
                         databaseReference.child(model.getItemId()).child("price").setValue(Long.valueOf(price));
 
