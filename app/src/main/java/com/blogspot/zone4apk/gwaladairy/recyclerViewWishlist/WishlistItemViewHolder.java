@@ -42,8 +42,6 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
     Long itemPrice;
 
 
-
-
     public WishlistItemViewHolder(final View itemView) {
         super(itemView);
         mAuth = FirebaseAuth.getInstance();
@@ -53,7 +51,6 @@ public class WishlistItemViewHolder extends RecyclerView.ViewHolder {
         text_price = (TextView) itemView.findViewById(R.id.product_price_wishlist);
         text_quantity = (TextView) itemView.findViewById(R.id.product_quantity_wishlist);
         image = (ImageView) itemView.findViewById(R.id.product_image_wishlist);
-
 
 
         moveingBtnToCrat = itemView.findViewById(R.id.button_move_to_cart);
