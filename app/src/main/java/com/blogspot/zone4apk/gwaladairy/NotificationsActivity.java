@@ -1,8 +1,8 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,19 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItem;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItemViewHolder;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewNotifications.NotificationItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewNotifications.NotificationItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class NotificationsActivity extends AppCompatActivity {
 
@@ -42,11 +36,15 @@ public class NotificationsActivity extends AppCompatActivity {
 
         //Setting recycler view-----------------------------------------------------------
         recyclerView = findViewById(R.id.recyclerview_notifications);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //Reversing the display of Notification data
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("NotificationDatabase");
         databaseReference.keepSynced(true);
-        Query query = databaseReference.limitToLast(50);
+        Query query = databaseReference.limitToLast(10).orderByChild("date");
         FirebaseRecyclerOptions<NotificationItem> options = new FirebaseRecyclerOptions.Builder<NotificationItem>().setQuery(query, NotificationItem.class).build();
 
         adapter = new FirebaseRecyclerAdapter<NotificationItem, NotificationItemViewHolder>(options) {

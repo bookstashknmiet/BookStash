@@ -5,7 +5,7 @@
     <!--<color name="colorAccent">#4DB6AC</color>-->
 
     <color name="colorPrimary">#ff5722</color>
-    <color name="colorPrimaryDark">#b23c17</color>
+    <color name="colorPrimaryDark">#ff5722</color>
     <color name="colorAccent">#007bb2</color>
 
     <!--Chat support activity content-->

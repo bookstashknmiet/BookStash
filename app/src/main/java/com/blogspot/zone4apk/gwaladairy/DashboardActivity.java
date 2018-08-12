@@ -2,6 +2,7 @@ package com.blogspot.zone4apk.gwaladairy;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,10 +25,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blogspot.zone4apk.gwaladairy.ViewPager.ViewPagerAdapter;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewDashboard.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -43,6 +47,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -79,6 +85,14 @@ public class DashboardActivity extends AppCompatActivity
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         filter.addAction("android.net.wifi.STATE_CHANGE");
         reciever = new ConnectivityReciever();
+
+        //Sliding Content
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.getLayoutParams().height = (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+                .getDefaultDisplay()
+                .getHeight() / 4);
+
+        mSetupViewPager();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading Products...");
@@ -235,7 +249,6 @@ public class DashboardActivity extends AppCompatActivity
         // [END initialize_auth]
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -247,6 +260,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+        ConnectivityReciever.snackbar = null;
         adapter.stopListening();
     }
 
@@ -388,6 +402,56 @@ public class DashboardActivity extends AppCompatActivity
     }
 
 
+    //Sliding Content
+    ViewPager viewPager;
+    ViewPagerAdapter viewPagerAdapter;
+    long slideCount;
+    Timer timer;
+
+    private void mSetupViewPager() {
+        viewPagerAdapter = new ViewPagerAdapter(getApplicationContext());
+        FirebaseDatabase.getInstance().getReference()
+                .child("DashboardSliderDatabase")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        slideCount = dataSnapshot.getChildrenCount();
+                        viewPagerAdapter.notifyDataSetChanged();
+                        if (slideCount <= 1)
+                            viewPager.setVisibility(View.GONE);
+                        else
+                            viewPager.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        //Error occured
+                    }
+                });
+        viewPager.setAdapter(viewPagerAdapter);
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = viewPager.getCurrentItem();
+                        if (slideCount > 1) {
+                            //First slide is default and must be used as prototype
+                            if (index == slideCount - 1) viewPager.setCurrentItem(1);
+                            else viewPager.setCurrentItem(index + 1);
+                        } else {
+                            //When their is only default item in the view pager we have to hide it
+                            viewPager.setCurrentItem(0);
+                        }
+                    }
+                });
+            }
+        }, 1500, 2000);
+    }
+
+
     //------------------------------Managing internet connection status
     //BroadcastReciever
     private ConnectivityReciever reciever;
@@ -396,7 +460,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         ConnectivityReciever connectivityReciever = new ConnectivityReciever();
-        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.dashboard_activity), true);
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.dashboard_activity));
     }
 
     @Override

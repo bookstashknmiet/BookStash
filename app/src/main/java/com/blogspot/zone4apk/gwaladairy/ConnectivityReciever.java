@@ -39,27 +39,35 @@ public class ConnectivityReciever extends BroadcastReceiver {
         void onNetworkConnectionChanged(boolean isConnected);
     }
 
-    public void showSnackbar(boolean isConnected, View layoutView, boolean showConnected) {
+    static Snackbar snackbar;
+
+    public void showSnackbar(boolean isConnected, View layoutView) {
         //isConnected is used to get connection status
         //layoutView is used to get view for snackbar
         //showConnected signify if we have to display snackbar when user connect to data
         String message = "";
-        Snackbar snackbar = Snackbar.make(layoutView, message, Snackbar.LENGTH_SHORT);
-        View sbView = snackbar.getView();
-        TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
 
         if (isConnected) {
-            message = "Good! Connected to Internet";
-            sbText.setTextColor(Color.WHITE);
-            sbView.setBackgroundColor(Color.rgb(76, 175, 80));
-            sbText.setText(message);
+            if (snackbar != null) {
+                message = "Good! Connected to Internet";
+                View sbView = snackbar.getView();
+                TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                snackbar.setDuration(Snackbar.LENGTH_LONG);
+                sbText.setTextColor(Color.WHITE);
+                sbView.setBackgroundColor(Color.rgb(76, 175, 80));
+                sbText.setText(message);
+                snackbar.show();
+            }
         } else {
+            snackbar = Snackbar.make(layoutView, message, Snackbar.LENGTH_INDEFINITE);
+            View sbView = snackbar.getView();
+            TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+
             message = "Sorry! Not connected to Internet";
-            snackbar.setDuration(Snackbar.LENGTH_INDEFINITE);
             sbText.setTextColor(Color.WHITE);
             sbView.setBackgroundColor(Color.rgb(244, 67, 54));
             snackbar.setText(message);
+            snackbar.show();
         }
-        snackbar.show();
     }
 }

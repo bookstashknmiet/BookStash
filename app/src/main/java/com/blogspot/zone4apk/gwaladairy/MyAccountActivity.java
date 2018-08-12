@@ -88,7 +88,6 @@ public class MyAccountActivity extends AppCompatActivity {
     public void mViewAllOrder(View view) {
         // onclick listener of view all order link
         startActivity(new Intent(getApplicationContext(), MyOrdersActivity.class));
-        finish();
     }
 
     public void msignout(View view) {
@@ -112,5 +111,13 @@ public class MyAccountActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MyAddressActivity.class);
         intent.putExtra("addressSelectRequired", false);
         startActivity(intent);
+    }
+
+    public void mViewShoppingCart(View view) {
+        startActivity(new Intent(getApplicationContext(), CartActivity.class));
+    }
+
+    public void mViewWishlist(View view) {
+        startActivity(new Intent(getApplicationContext(), WishlistActivity.class));
     }
 }

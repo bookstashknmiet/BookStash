@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,7 +156,7 @@ public class WishlistActivity extends AppCompatActivity implements ConnectivityR
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         ConnectivityReciever connectivityReciever = new ConnectivityReciever();
-        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.wishlist_activity), false);
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.wishlist_activity));
     }
 
     @Override

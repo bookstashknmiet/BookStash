@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -250,7 +249,7 @@ public class CartActivity extends AppCompatActivity implements ConnectivityRecie
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         ConnectivityReciever connectivityReciever = new ConnectivityReciever();
-        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.cart_activity), false);
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.cart_activity));
     }
 
     @Override

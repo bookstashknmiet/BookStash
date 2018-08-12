@@ -167,7 +167,7 @@ public class ConfirmOrderActivity extends AppCompatActivity implements Connectiv
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         ConnectivityReciever connectivityReciever = new ConnectivityReciever();
-        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.confirmorder_activity), false);
+        connectivityReciever.showSnackbar(isConnected, findViewById(R.id.confirmorder_activity));
     }
 
     @Override
