@@ -140,8 +140,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DashboardActivity" />
-        </activity>
 
+        </activity>
+        <activity
+            android:name=".ProductSubscriptionActivity"
+            android:label="Subscription"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DashboardActivity" />
+        </activity>
     </application>
 
 </manifest>

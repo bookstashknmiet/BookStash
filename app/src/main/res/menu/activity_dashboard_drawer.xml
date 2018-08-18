@@ -21,6 +21,11 @@
             android:icon="@drawable/ic_wishlist"
             android:title="Wishlist" />
         <item
+            android:id="@+id/nav_subscriptions"
+            android:name="Wishlist"
+            android:icon="@drawable/ic_subscription"
+            android:title="Subscriptions" />
+        <item
             android:id="@+id/nav_notification"
             android:name="Wishlist"
             android:icon="@drawable/ic_notifications"
