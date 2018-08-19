@@ -270,11 +270,6 @@ public class DashboardActivity extends AppCompatActivity
             nav_user_name.setText(user.getDisplayName());
             nav_user_email.setVisibility(View.VISIBLE);
             nav_user_email.setText(user.getEmail());
-//            Picasso.with(this)
-//                    .load(user.getPhotoUrl().toString()).transform(new CropCircleTransformation())
-//                    .into(nav_user_img);
-// since we do not have user image right now.
-
             Picasso.with(this)
                     .load(R.mipmap.ic_launcher)
                     .transform(new CropCircleTransformation())
@@ -336,6 +331,11 @@ public class DashboardActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_mycart) {
             Intent intentCart = new Intent(DashboardActivity.this, CartActivity.class);
+            startActivity(intentCart);
+            return true;
+        }
+        if (id == R.id.action_notification) {
+            Intent intentCart = new Intent(DashboardActivity.this, NotificationsActivity.class);
             startActivity(intentCart);
             return true;
         }

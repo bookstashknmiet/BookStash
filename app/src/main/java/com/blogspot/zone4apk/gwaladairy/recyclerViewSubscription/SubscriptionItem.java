@@ -1,9 +1,5 @@
 package com.blogspot.zone4apk.gwaladairy.recyclerViewSubscription;
 
-/**
- * Created by AMIT on 8/13/2018.
- */
-
 public class SubscriptionItem {
 
     private String name;
@@ -12,9 +8,9 @@ public class SubscriptionItem {
     private String imageUrl;
     private String quantity;
     private String itemId;
-    private String no_of_days;
+    private Long no_of_days;
 
-    public SubscriptionItem(){
+    public SubscriptionItem() {
 
     }
 
@@ -66,11 +62,11 @@ public class SubscriptionItem {
         this.itemId = itemId;
     }
 
-    public String getNo_of_days() {
+    public Long getNo_of_days() {
         return no_of_days;
     }
 
-    public void setNo_of_days(String no_of_days) {
+    public void setNo_of_days(Long no_of_days) {
         this.no_of_days = no_of_days;
     }
 }

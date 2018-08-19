@@ -1,34 +1,27 @@
 package com.blogspot.zone4apk.gwaladairy;
 
 import android.content.Intent;
-import android.media.browse.MediaBrowser;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.blogspot.zone4apk.gwaladairy.recyclerViewAddress.Address;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItem;
-import com.blogspot.zone4apk.gwaladairy.recyclerViewCart.CartItemViewHolder;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewSubscription.SubscriptionItem;
 import com.blogspot.zone4apk.gwaladairy.recyclerViewSubscription.SubscriptionItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 public class ProductSubscriptionActivity extends AppCompatActivity {
 
@@ -39,28 +32,30 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
     //Database For Subscription----------------
     DatabaseReference subsUserDatabase;
 
-
     //FirebaseDatabase
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
 
-    Address address;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_subscription);
-
         mAuth = FirebaseAuth.getInstance();
+
         //Setting recycler view-----------------------------------------------------------
         recyclerView = findViewById(R.id.recyclerview_productSubscription);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child("SubscriptionDatabase").child("ProductDetailsDatabase");
+        databaseReference = firebaseDatabase.getReference()
+                .child("SubscriptionDatabase")
+                .child("ProductDetailsDatabase");
         databaseReference.keepSynced(true);
         Query query = databaseReference.limitToLast(50);
-        FirebaseRecyclerOptions<SubscriptionItem> options = new FirebaseRecyclerOptions.Builder<SubscriptionItem>().setQuery(query, SubscriptionItem.class).build();
+        FirebaseRecyclerOptions<SubscriptionItem> options
+                = new FirebaseRecyclerOptions.Builder<SubscriptionItem>()
+                .setQuery(query, SubscriptionItem.class)
+                .build();
 
         adapter = new FirebaseRecyclerAdapter<SubscriptionItem, SubscriptionItemViewHolder>(options) {
             @NonNull
@@ -78,29 +73,47 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
                 holder.setImage(model.getImageUrl(), getApplicationContext());
                 holder.setText_quantity(model.getQuantity());
                 holder.setItemId(model.getItemId());
+                holder.setText_noOfDays(String.valueOf(model.getNo_of_days()));
 
 
-                //Database work from here-------------------
-                subsUserDatabase = FirebaseDatabase.getInstance().getReference().child("SubscriptionDatabase").child("Users").
-                        child(mAuth.getCurrentUser().getUid().toString()).child(model.getItemId());
+                holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        subsUserDatabase = FirebaseDatabase.getInstance().getReference()
+                                .child("SubscriptionDatabase")
+                                .child("Users")
+                                .child(mAuth.getCurrentUser().getUid())
+                                .child(model.getItemId());
+
+                        subsUserDatabase.child("dateOfSubscribe").setValue(ServerValue.TIMESTAMP);
+                        subsUserDatabase.child("status").setValue("Cancelled");
+                    }
+                });
+
                 holder.subscribeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mSubscriptionCheckout(view);
-
+                        subsUserDatabase = FirebaseDatabase.getInstance().getReference()
+                                .child("SubscriptionDatabase")
+                                .child("Users")
+                                .child(mAuth.getCurrentUser().getUid())
+                                .child(model.getItemId());
+                        mSubscriptionCheckout();
                     }
                 });
+
+                holder.calculate();
             }
         };
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
 
-    public void mSubscriptionCheckout(View view) {
+    public void mSubscriptionCheckout() {
+        //Obtaining address for delivery of product
         Intent intent = new Intent(getApplicationContext(), MyAddressActivity.class);
         intent.putExtra("addressSelectRequired", true);
         startActivityForResult(intent, 1);
-        // Toast.makeText(this, "Please choose an address to complete your order.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -110,13 +123,14 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Address address = (Address) data.getExtras().getSerializable("ADDRESS_OBJECT");
                 Toast.makeText(this, "Selected " + (address != null ? address.getName() : " ") + "'s address for this delivery", Toast.LENGTH_SHORT).show();
+                subsUserDatabase.child("deliveryAddress").setValue(address);
+
+                //adding other details to database
                 subsUserDatabase.child("subscriptionApplied").setValue(ServerValue.TIMESTAMP);
                 subsUserDatabase.child("status").setValue("Applied");
-                subsUserDatabase.child("subscriptionStart").setValue("dd/mm/yyyy");
+                subsUserDatabase.child("subscriptionStart").setValue("31/12/1999");
                 subsUserDatabase.child("balance").setValue(0);
-                subsUserDatabase.child("deliveryAddress").setValue(address);
-                //this.address=address;
-
+                subsUserDatabase.child("no_of_days").setValue(28);
             } else {
                 Toast.makeText(this, "Failure selecting delivery address. Please try again.", Toast.LENGTH_SHORT).show();
             }

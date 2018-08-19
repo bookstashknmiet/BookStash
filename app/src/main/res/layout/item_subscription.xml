@@ -9,12 +9,14 @@
     app:cardCornerRadius="4dp"
     app:cardUseCompatPadding="true">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="80dp" />
+    <ImageView
+        android:id="@+id/image_subscribed"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end|top"
+        android:layout_margin="4dp"
+        android:elevation="4dp"
+        android:src="@drawable/ic_check_circle_24dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,53 +31,67 @@
             android:orientation="horizontal"
             android:weightSum="3">
 
-            <ImageView
-                android:id="@+id/product_image"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_weight="2"
-                android:scaleType="centerCrop" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center" />
+
+
+                <ImageView
+                    android:id="@+id/product_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:weightSum="3">
+                android:orientation="vertical">
 
-                <LinearLayout
+
+                <TextView
+                    android:id="@+id/product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:gravity="center_vertical"
+                    android:text="product title"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/product_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:layout_gravity="start"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="product description"
+                    android:textColor="#505050"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/product_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="product title"
-                        android:textColor="#000"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/product_price"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical|end"
-                        android:text="\u20B945"
-                        android:textColor="#0000ff"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/product_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="\u20B945"
+                    android:textColor="#0000ff"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/product_quantity"
@@ -85,48 +101,47 @@
                     android:text="product quantity"
                     android:textAllCaps="true"
                     android:textColor="#000"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/product_description"
+                    android:id="@+id/product_no_of_days"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:text="product description"
-                    android:textColor="#505050"
+                    android:text="no of days"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/subs_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="16dp"
+                android:background="#999" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Delivery Address"
+                android:textColor="#000"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="16dp" />
 
             <TextView
                 android:id="@+id/textView_name_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="name"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -155,40 +170,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="mobile number"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp" />
+                android:layout_height="16dp" />
 
             <LinearLayout
-                android:visibility="gone"
-                android:orientation="vertical"
                 android:id="@+id/dates"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/textView_start_dt"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start Date"
-                android:textSize="12sp" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView_end_dt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="End Date"
-                android:textSize="12sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Subscription Details"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textView_balnce"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Balance"
-                android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/textView_start_dt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Start Date"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView_end_dt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="End Date"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView_balnce"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Balance"
+                    android:textSize="12sp" />
             </LinearLayout>
-
         </LinearLayout>
 
         <View
@@ -206,6 +229,7 @@
             android:text="Subscribe"
             android:textAllCaps="true"
             android:textColor="?android:attr/colorAccent"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -217,9 +241,9 @@
             android:padding="8dp"
             android:text="Cancel"
             android:textAllCaps="true"
-            android:textColor="?android:attr/colorAccent"
-            android:textStyle="bold"
-            android:visibility="gone" />
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
 
     </LinearLayout>
