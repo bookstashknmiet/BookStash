@@ -170,7 +170,7 @@ public class SubscriptionItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setText_noOfDays(String noOfDays) {
-        text_noOfDays.setText("Subscription valid for " + noOfDays + "days");
+        text_noOfDays.setText("For " + noOfDays + " days.");
     }
 
     public void calculate() {

@@ -1,5 +1,7 @@
 package com.blogspot.zone4apk.gwaladairy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -85,8 +87,25 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
                                 .child(mAuth.getCurrentUser().getUid())
                                 .child(model.getItemId());
 
-                        subsUserDatabase.child("dateOfSubscribe").setValue(ServerValue.TIMESTAMP);
-                        subsUserDatabase.child("status").setValue("Cancelled");
+                        CharSequence options[] = new CharSequence[]{"Cancel subscription", "Dismiss"};
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ProductSubscriptionActivity.this);
+                        builder.setTitle("Are you sure?");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //click event handler
+                                if (which == 0) {
+                                    subsUserDatabase.child("dateOfSubscribe").setValue(ServerValue.TIMESTAMP);
+                                    subsUserDatabase.child("status").setValue("Cancelled");
+                                    dialog.dismiss();
+                                }
+                                if (which == 1) {
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
+                        builder.show();
+
                     }
                 });
 
