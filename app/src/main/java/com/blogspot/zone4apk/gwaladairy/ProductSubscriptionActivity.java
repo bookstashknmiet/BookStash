@@ -39,6 +39,8 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
 
+    public Long no_of_days = 28L;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +80,7 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
                 holder.setText_noOfDays(String.valueOf(model.getNo_of_days()));
 
 
+                //handling on click
                 holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -112,6 +115,8 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
                 holder.subscribeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        //Setting no of days in local variable
+                        ProductSubscriptionActivity.this.no_of_days = model.getNo_of_days();
                         subsUserDatabase = FirebaseDatabase.getInstance().getReference()
                                 .child("SubscriptionDatabase")
                                 .child("Users")
@@ -149,7 +154,7 @@ public class ProductSubscriptionActivity extends AppCompatActivity {
                 subsUserDatabase.child("status").setValue("Applied");
                 subsUserDatabase.child("subscriptionStart").setValue("31/12/1999");
                 subsUserDatabase.child("balance").setValue(0);
-                subsUserDatabase.child("no_of_days").setValue(28);
+                subsUserDatabase.child("no_of_days").setValue(this.no_of_days);
             } else {
                 Toast.makeText(this, "Failure selecting delivery address. Please try again.", Toast.LENGTH_SHORT).show();
             }

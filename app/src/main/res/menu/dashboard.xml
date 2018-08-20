@@ -8,12 +8,22 @@
         android:icon="@drawable/ic_cart"
         android:orderInCategory="100"
         android:title="My Cart"
+        android:visible="false"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_mysubscription"
+        android:name="My Cart"
+        android:icon="@drawable/ic_subscription_white_24dp"
+        android:orderInCategory="101"
+        android:title="My Subscriptions"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_notification"
         android:name="Notification"
         android:icon="@drawable/ic_notifications_white"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         android:title="Notifications"
         app:showAsAction="ifRoom" />
 

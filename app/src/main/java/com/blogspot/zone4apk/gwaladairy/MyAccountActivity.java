@@ -41,7 +41,7 @@ public class MyAccountActivity extends AppCompatActivity {
         userMobile = findViewById(R.id.textView_user_mobile);
         btnSignout = findViewById(R.id.btn_sign_out);
         Picasso.with(this)
-                .load(R.drawable.gwala)
+                .load(R.drawable.gwala_white)
                 .transform(new CropCircleTransformation())
                 .into(imageView);
 
@@ -119,5 +119,9 @@ public class MyAccountActivity extends AppCompatActivity {
 
     public void mViewWishlist(View view) {
         startActivity(new Intent(getApplicationContext(), WishlistActivity.class));
+    }
+
+    public void mViewAllSubscription(View view) {
+        startActivity(new Intent(getApplicationContext(), ProductSubscriptionActivity.class));
     }
 }

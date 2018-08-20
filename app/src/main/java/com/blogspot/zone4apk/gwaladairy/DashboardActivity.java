@@ -96,7 +96,8 @@ public class DashboardActivity extends AppCompatActivity
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading Products...");
-        progressDialog.show();
+        // progressDialog.show();
+        //To be re-enabled when in use
 
         //Setting recycler view-----------------------------------------------------------
         recyclerView = findViewById(R.id.recyclerview_dashboard);
@@ -139,6 +140,9 @@ public class DashboardActivity extends AppCompatActivity
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Snackbar
+                                .make(view, "Sorry! We provide only subscription facility in your area.", Snackbar.LENGTH_LONG)
+                                .show();
                         CharSequence options[] = new CharSequence[]{"Add to Cart", "Add to Wishlist"};
                         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
                         builder.setTitle("Select Option");
@@ -202,7 +206,8 @@ public class DashboardActivity extends AppCompatActivity
                                 }
                             }
                         });
-                        builder.show();
+                        // builder.show();
+                        //need to be changed when in use
                     }
                 });
             }
@@ -219,8 +224,10 @@ public class DashboardActivity extends AppCompatActivity
                 //showing view when there is any item in cart.
                 if (i == 0) {//hiding views when there is no item in cart.
 
-                } else
-                    Toast.makeText(DashboardActivity.this, String.format("Showing %d products", i), Toast.LENGTH_LONG).show();
+                } else {
+                    //to be re-enabled when used
+                    // Toast.makeText(DashboardActivity.this, String.format("Showing %d products", i), Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -253,6 +260,7 @@ public class DashboardActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         adapter.startListening();
+        //to be re-enabled when in use
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -261,6 +269,7 @@ public class DashboardActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         ConnectivityReciever.snackbar = null;
+        //to be re-enabled when in use
         adapter.stopListening();
     }
 
@@ -271,13 +280,13 @@ public class DashboardActivity extends AppCompatActivity
             nav_user_email.setVisibility(View.VISIBLE);
             nav_user_email.setText(user.getEmail());
             Picasso.with(this)
-                    .load(R.mipmap.ic_launcher)
+                    .load(R.drawable.gwala_white)
                     .transform(new CropCircleTransformation())
                     .into(nav_user_img);
 
         } else {
             Picasso.with(this)
-                    .load(R.mipmap.ic_launcher)
+                    .load(R.drawable.gwala_white)
                     .transform(new CropCircleTransformation())
                     .into(nav_user_img);
             nav_user_name.setText(R.string.nav_header_title);
@@ -293,7 +302,7 @@ public class DashboardActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (doubleBackToExitPressedOnce) {
-                System.exit(0);
+                finishAffinity();
             } else {
                 this.doubleBackToExitPressedOnce = true;
                 Snackbar.make(findViewById(R.id.drawer_layout), "Please click back again to exit", Snackbar.LENGTH_SHORT).show();
@@ -336,6 +345,11 @@ public class DashboardActivity extends AppCompatActivity
         }
         if (id == R.id.action_notification) {
             Intent intentCart = new Intent(DashboardActivity.this, NotificationsActivity.class);
+            startActivity(intentCart);
+            return true;
+        }
+        if (id == R.id.action_mysubscription) {
+            Intent intentCart = new Intent(DashboardActivity.this, ProductSubscriptionActivity.class);
             startActivity(intentCart);
             return true;
         }
@@ -474,5 +488,9 @@ public class DashboardActivity extends AppCompatActivity
         //register connection status listener
         MyApplication.getInstance().setConnectivityListener(this);
         registerReceiver(reciever, filter);
+    }
+
+    public void mViewAllSubscription(View view) {
+        startActivity(new Intent(getApplicationContext(), ProductSubscriptionActivity.class));
     }
 }

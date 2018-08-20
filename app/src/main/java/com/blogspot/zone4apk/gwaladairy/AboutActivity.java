@@ -22,7 +22,7 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         imageViewLogo = findViewById(R.id.imageView_logo);
         Picasso.with(this)
-                .load(R.drawable.gwala)
+                .load(R.drawable.gwala_white)
                 .transform(new CropCircleTransformation())
                 .into(imageViewLogo);
 
@@ -51,5 +51,10 @@ public class AboutActivity extends AppCompatActivity {
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.promomessage));
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
+    public void mTermsConditions(View view) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/view/gwala-dairy/terms-of-service"));
+        startActivity(browserIntent);
     }
 }
