@@ -32,8 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
-                android:scaleType="centerCrop"
-                android:src="@drawable/dashboard_img" />
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,13 +72,14 @@
                     android:text="product quantity"
                     android:textAllCaps="true"
                     android:textColor="#000"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:text="Sold by: Gwala Dairy"
+                    android:text="Sold by: BookStash"
                     android:textColor="#000"
                     android:textSize="10sp" />
 
@@ -99,8 +99,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -118,8 +118,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:paddingEnd="4dp"
-                        android:paddingStart="4dp">
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp">
 
                         <ImageView
                             android:id="@+id/btnDecQty"
@@ -157,8 +157,8 @@
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
             android:background="#999"
             android:visibility="gone" />
 

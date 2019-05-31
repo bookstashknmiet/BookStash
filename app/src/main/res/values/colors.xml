@@ -4,12 +4,12 @@
     <!--<color name="colorPrimaryDark">#00675b</color>-->
     <!--<color name="colorAccent">#4DB6AC</color>-->
 
-    <color name="colorPrimary">#ff5722</color>
-    <color name="colorPrimaryDark">#ff5722</color>
+    <color name="colorPrimary">#4690b0</color>
+    <color name="colorPrimaryDark">#00568c</color>
     <color name="colorAccent">#007bb2</color>
 
     <!--Chat support activity content-->
-    <color name="colorAdminCard">#ff5722</color>
+    <color name="colorAdminCard">#4690b0</color>
     <color name="colorUserCard">#fff</color>
     <color name="colorAdminText">#fff</color>
     <color name="colorUserText">#555</color>

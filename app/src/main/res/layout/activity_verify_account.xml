@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
                 android:gravity="center"
-                android:text="Gwala Dairy"
+                android:text="BookStash"
                 android:textColor="#fff"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="A dairy at your doorstep"
+                android:text="Books at your doorstep"
                 android:textColor="#fff"
                 android:textSize="20sp" />
 

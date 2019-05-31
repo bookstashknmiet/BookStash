@@ -75,6 +75,7 @@
                 android:textAllCaps="true"
                 android:textColor="#000"
                 android:textSize="14sp"
+                android:visibility="gone"
                 android:textStyle="bold" />
 
 

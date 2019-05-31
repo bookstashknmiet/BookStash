@@ -1,14 +1,14 @@
 <resources>
-    <string name="app_name">Gwala Dairy</string>
-    <string name="title_activity_dashboard">Gwala Dairy</string>
+    <string name="app_name">BookStash</string>
+    <string name="title_activity_dashboard">BookStash</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Gwala Dairy</string>
+    <string name="nav_header_title">BookStash</string>
     <string name="nav_header_subtitle">user@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="promomessage">Promotional Message</string>
+    <string name="promomessage">Hey there! download BookStash, it is amazing to buy or rent books.</string>
 
     <string name="about_text1">Your feedback is greatly appreciated. Problems,</string>
     <string name="about_text2">suggestions, general queries please let us</string>
@@ -18,8 +18,8 @@
     <string name="about_share">Share the app</string>
     <string name="about_developer">Application designed and developed for commercial use.</string>
 
-    <string name="helpline_number">+91–8969218143</string>
-    <string name="helpline_office">Shivpuri \nGali No. 2 \nModinagar \nGhaziabad - 201204.</string>
+    <string name="helpline_number">+91–8989898989</string>
+    <string name="helpline_office">Modinagar \nGhaziabad - 201204.</string>
     <string name="chat_support">Chat now with support executive.</string>
     <string name="forget_password_desc">To reset password, enter your email, press the button and check your registered email to follow instructions.</string>
     <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>

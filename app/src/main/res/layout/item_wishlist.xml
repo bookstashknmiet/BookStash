@@ -89,6 +89,7 @@
                     android:text="product quantity"
                     android:textAllCaps="true"
                     android:textColor="#000"
+                    android:visibility="gone"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 

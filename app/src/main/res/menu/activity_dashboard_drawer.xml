@@ -14,13 +14,13 @@
             android:name="My Orders"
             android:icon="@drawable/ic_myorders"
             android:title="My Orders"
-            android:visible="false" />
+            android:visible="true" />
         <item
             android:id="@+id/nav_wishlist"
             android:name="Wishlist"
             android:icon="@drawable/ic_wishlist"
             android:title="Wishlist"
-            android:visible="false" />
+            android:visible="true" />
         <item
             android:id="@+id/nav_subscriptions"
             android:name="Wishlist"

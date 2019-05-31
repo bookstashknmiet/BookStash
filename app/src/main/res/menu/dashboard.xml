@@ -8,7 +8,7 @@
         android:icon="@drawable/ic_cart"
         android:orderInCategory="100"
         android:title="My Cart"
-        android:visible="false"
+        android:visible="true"
         app:showAsAction="always" />
 
     <item
