@@ -31,11 +31,11 @@ public class HelpActivity extends AppCompatActivity {
     }
 
     public void mOfficeSupport(View view) {
-        Snackbar.make(findViewById(R.id.layout_help_activity), "Do you want to navigate to Gwala Dairy?", Snackbar.LENGTH_SHORT)
+        Snackbar.make(findViewById(R.id.layout_help_activity), "Do you want to navigate to BookStash?", Snackbar.LENGTH_SHORT)
                 .setAction("Navigate", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Uri u = Uri.parse("http://maps.google.com/maps?daddr=28.839012,77.576087");
+                        Uri u = Uri.parse("http://maps.google.com/maps?daddr=28.8472365,77.5758742");
                         startActivity(new Intent(Intent.ACTION_VIEW, u).setData(u));
                     }
                 })

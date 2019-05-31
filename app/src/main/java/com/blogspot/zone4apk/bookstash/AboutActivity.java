@@ -48,7 +48,7 @@ public class AboutActivity extends AppCompatActivity {
     public void shareApp(View view) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "https://play.google.com/store/apps/details?id=com.blogspot.zone4apk.bookstash";
+        String shareBody = "Hey! Check out BookStash: An online book store! \nAn app to buy and rent books online.\nhttps://play.google.com/store/apps/details?id=com.blogspot.zone4apk.bookstash";
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.promomessage));
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
