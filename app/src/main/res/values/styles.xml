@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -19,7 +19,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
-    <style name="TextLabel" parent="TextAppearance.AppCompat">
+    <style name="TextLabel" parent="AppTheme">
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColorHint">#fff</item>
         <item name="android:textSize">20sp</item>
@@ -30,7 +30,7 @@
         <item name="colorControlActivated">#fff</item>
     </style>
 
-    <style name="TextLabelAddress" parent="TextAppearance.AppCompat">
+    <style name="TextLabelAddress" parent="AppTheme">
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColorHint">#999</item>
         <item name="android:textSize">16sp</item>

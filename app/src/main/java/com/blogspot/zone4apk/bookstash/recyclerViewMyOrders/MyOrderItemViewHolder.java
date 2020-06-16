@@ -1,7 +1,7 @@
 package com.blogspot.zone4apk.bookstash.recyclerViewMyOrders;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;

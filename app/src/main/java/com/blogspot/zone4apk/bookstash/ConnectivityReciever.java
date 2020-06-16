@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class ConnectivityReciever extends BroadcastReceiver {
 
@@ -51,7 +52,7 @@ public class ConnectivityReciever extends BroadcastReceiver {
             if (snackbar != null) {
                 message = "Good! Connected to Internet";
                 View sbView = snackbar.getView();
-                TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                TextView sbText = (TextView) sbView.findViewById(R.id.snackbar_text);
                 snackbar.setDuration(Snackbar.LENGTH_LONG);
                 sbText.setTextColor(Color.WHITE);
                 sbView.setBackgroundColor(Color.rgb(76, 175, 80));
@@ -61,7 +62,7 @@ public class ConnectivityReciever extends BroadcastReceiver {
         } else {
             snackbar = Snackbar.make(layoutView, message, Snackbar.LENGTH_INDEFINITE);
             View sbView = snackbar.getView();
-            TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView sbText = (TextView) sbView.findViewById(R.id.snackbar_text);
 
             message = "Sorry! Not connected to Internet";
             sbText.setTextColor(Color.WHITE);

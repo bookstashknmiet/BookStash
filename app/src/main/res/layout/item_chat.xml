@@ -18,7 +18,7 @@
             android:layout_gravity="start|center_vertical"
             android:src="@drawable/ic_chat_green_24dp" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -35,7 +35,7 @@
                 android:background="#fff"
                 android:padding="8dp"
                 android:text="Hi! How may I help you?" />
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
         <ImageView
